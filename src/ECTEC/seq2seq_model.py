@@ -37,18 +37,14 @@ class BartSeq2SeqModel(nn.Module):
                 else:
                     index = index[0]
                 assert index >= num_tokens, (index, num_tokens, token)
-                indexes = _tokenizer.convert_tokens_to_ids(
-                    _tokenizer.tokenize(token[2:-2])
-                )
+                indexes = _tokenizer.convert_tokens_to_ids(_tokenizer.tokenize(token[2:-2]))
                 embed = model.encoder.embed_tokens.weight.data[indexes[0]]
                 for i in indexes[1:]:
                     embed += model.decoder.embed_tokens.weight.data[i]
                 embed /= len(indexes)
                 model.decoder.embed_tokens.weight.data[index] = embed
         self.encoder = FBartEncoder(encoder)
-        self.linear_layer = nn.Sequential(
-            nn.Linear(self.hidden_size * 3, 2), nn.Sigmoid()
-        )
+        self.linear_layer = nn.Sequential(nn.Linear(self.hidden_size * 3, 2), nn.Sigmoid())
         self.graph_att_layer = GraphAttentionLayer(
             in_features=self.hidden_size,
             out_features=self.hidden_size,
@@ -92,11 +88,11 @@ class BartSeq2SeqModel(nn.Module):
             utt_prefix_ids,
             dia_utt_num,
         )
-        encoder_outputs_xReact, encoder_mask_xReact, hidden_states_xReact = (
-            self.encoder(word_atomic_xReact, len_word_atomic_xReact)
+        encoder_outputs_xReact, encoder_mask_xReact, hidden_states_xReact = self.encoder(
+            word_atomic_xReact, len_word_atomic_xReact
         )
-        encoder_outputs_oReact, encoder_mask_oReact, hidden_states_oReact = (
-            self.encoder(word_atomic_oReact, len_word_atomic_oReact)
+        encoder_outputs_oReact, encoder_mask_oReact, hidden_states_oReact = self.encoder(
+            word_atomic_oReact, len_word_atomic_oReact
         )
         encoder_outputs_utt_xReact = get_utt_representation(
             encoder_outputs_xReact,
@@ -154,26 +150,16 @@ class BartSeq2SeqModel(nn.Module):
         indicator_x_ = F.softmax(indicator_x, dim=-1)
         indicator_o_ = F.softmax(indicator_o, dim=-1)
 
-        indicator_x_ = (
-            indicator_x_[:, :, 0]
-            .unsqueeze(2)
-            .repeat(1, 1, encoder_outputs_utt.size(-1))
-        )
+        indicator_x_ = indicator_x_[:, :, 0].unsqueeze(2).repeat(1, 1, encoder_outputs_utt.size(-1))
 
-        indicator_o_ = (
-            indicator_o_[:, :, 0]
-            .unsqueeze(2)
-            .repeat(1, 1, encoder_outputs_utt.size(-1))
-        )
+        indicator_o_ = indicator_o_[:, :, 0].unsqueeze(2).repeat(1, 1, encoder_outputs_utt.size(-1))
 
         new_xReact_encoder_outputs_utt = (
-            indicator_x_ * encoder_outputs_utt_xReact
-            + (1 - indicator_x_) * encoder_outputs_utt_xReact_retrieval
+            indicator_x_ * encoder_outputs_utt_xReact + (1 - indicator_x_) * encoder_outputs_utt_xReact_retrieval
         )
 
         new_oReact_encoder_outputs_utt = (
-            indicator_o_ * encoder_outputs_utt_oReact
-            + (1 - indicator_o_) * encoder_outputs_utt_oReact_retrieval
+            indicator_o_ * encoder_outputs_utt_oReact + (1 - indicator_o_) * encoder_outputs_utt_oReact_retrieval
         )
 
         new_encoder_outputs_utt = self.graph_att_layer(
@@ -186,11 +172,7 @@ class BartSeq2SeqModel(nn.Module):
 
         batch_size = dia_utt_num.shape[0]
 
-        broad_cast_seq_len = (
-            torch.arange(encoder_outputs_utt.size(1))
-            .expand(batch_size, -1)
-            .to(dia_utt_num)
-        )
+        broad_cast_seq_len = torch.arange(encoder_outputs_utt.size(1)).expand(batch_size, -1).to(dia_utt_num)
 
         utt_mask = broad_cast_seq_len < dia_utt_num.unsqueeze(1)
 

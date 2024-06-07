@@ -103,9 +103,7 @@ def train(num_epochs=20):
         recall = recall_score(all_targets, all_predictions, average="macro")
         precision = precision_score(all_targets, all_predictions, average="macro")
 
-        print(
-            f"Validation Accuracy: {acc:.4f}, F1 Score: {f1:.4f}, Recall: {recall:.4f}, Precision: {precision:.4f}"
-        )
+        print(f"Validation Accuracy: {acc:.4f}, F1 Score: {f1:.4f}, Recall: {recall:.4f}, Precision: {precision:.4f}")
 
 
 def test():
@@ -127,9 +125,7 @@ def test():
     recall = recall_score(all_targets, all_predictions, average="macro")
     precision = precision_score(all_targets, all_predictions, average="macro")
 
-    print(
-        f"Test Accuracy: {acc:.4f}, F1 Score: {f1:.4f}, Recall: {recall:.4f}, Precision: {precision:.4f}"
-    )
+    print(f"Test Accuracy: {acc:.4f}, F1 Score: {f1:.4f}, Recall: {recall:.4f}, Precision: {precision:.4f}")
 
 
 train()

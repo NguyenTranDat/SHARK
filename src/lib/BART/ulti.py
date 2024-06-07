@@ -9,9 +9,7 @@ def get_utt_representation(all_word_state, utt_prefix_ids, dia_utt_num):
     )  # bsz x max_utt_len x hidden_size
     # batch_size = dia_utt_num.shape[0]
     batch_size = dia_utt_num.shape[0]
-    broad_cast_seq_len = (
-        torch.arange(output.size(1)).expand(batch_size, -1).to(dia_utt_num)
-    )
+    broad_cast_seq_len = torch.arange(output.size(1)).expand(batch_size, -1).to(dia_utt_num)
     mask = broad_cast_seq_len < dia_utt_num.unsqueeze(1)
     utt_mask = mask.eq(0)  # bsz x max_utt_len
     utt_mask_ = utt_mask.unsqueeze(2).repeat(1, 1, output.size(-1))

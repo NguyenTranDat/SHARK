@@ -2,7 +2,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 # Tải các gói cần thiết của nltk
-nltk.download('punkt')
+nltk.download("punkt")
 
 sentence = "<<React1>> so, you know what, that doesn't matter."
 

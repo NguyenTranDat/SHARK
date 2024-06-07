@@ -13,9 +13,7 @@ class Seq2SeqDecoder(nn.Module):
         raise NotImplemented
 
     def reorder_states(self, indices: torch.LongTensor, states):
-        assert isinstance(
-            states, State
-        ), f"`states` should be of type State instead of {type(states)}"
+        assert isinstance(states, State), f"`states` should be of type State instead of {type(states)}"
         states.reorder_state(indices)
 
     def init_state(

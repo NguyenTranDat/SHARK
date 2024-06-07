@@ -18,22 +18,16 @@ class GraphAttentionLayer(nn.Module):
 
         self.W = nn.Parameter(torch.empty(size=(in_features, out_features)))
         nn.init.xavier_uniform_(self.W.data, gain=1.414)
-        self.a_SS = nn.Parameter(
-            torch.empty(size=(2 * out_features, 1))
-        )  # same speaker
+        self.a_SS = nn.Parameter(torch.empty(size=(2 * out_features, 1)))  # same speaker
         nn.init.xavier_uniform_(self.a_SS.data, gain=1.414)
-        self.a_DS = nn.Parameter(
-            torch.empty(size=(2 * out_features, 1))
-        )  # different speaker
+        self.a_DS = nn.Parameter(torch.empty(size=(2 * out_features, 1)))  # different speaker
         nn.init.xavier_uniform_(self.a_DS.data, gain=1.414)
         self.leakyrelu = nn.LeakyReLU(self.alpha)
         self.csk_linear = nn.Linear(out_features, out_features)
 
     def forward(self, h, h_xReact, h_oReact, utt_xReact_mask, utt_oReact_mask):
         bz, N, _ = h.size()
-        Wh = torch.matmul(
-            h, self.W
-        )  # linearly transform the node's feature vector. h.shape: (N, in_features)
+        Wh = torch.matmul(h, self.W)  # linearly transform the node's feature vector. h.shape: (N, in_features)
         h_xReact = self.csk_linear(h_xReact)
         h_oReact = self.csk_linear(h_oReact)
 
@@ -52,9 +46,7 @@ class GraphAttentionLayer(nn.Module):
             dim=-1,
         ).view(-1, N, N, 2 * self.out_features)
 
-        e_SS = self.leakyrelu(
-            torch.matmul(a_input_SS, self.a_SS).squeeze(-1)
-        )  # edge weight
+        e_SS = self.leakyrelu(torch.matmul(a_input_SS, self.a_SS).squeeze(-1))  # edge weight
         utt_xReact_mask, utt_oReact_mask = (
             utt_xReact_mask[:, :N, :N],
             utt_oReact_mask[:, :N, :N],
@@ -89,11 +81,4 @@ class GraphAttentionLayer(nn.Module):
         return all_combinations_matrix.view(N, N, 2 * self.out_features)
 
     def __repr__(self):
-        return (
-            self.__class__.__name__
-            + " ("
-            + str(self.in_features)
-            + " -> "
-            + str(self.out_features)
-            + ")"
-        )
+        return self.__class__.__name__ + " (" + str(self.in_features) + " -> " + str(self.out_features) + ")"

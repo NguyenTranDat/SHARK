@@ -76,9 +76,7 @@ class MIntRec2:
         self.mapping2targetid = {}
 
         for key, value in self.mapping.items():
-            key_id = self.tokenizer.convert_tokens_to_ids(
-                self.tokenizer.tokenize(value)
-            )
+            key_id = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(value))
             assert len(key_id) == 1, value
             assert key_id[0] >= self.tokenizer.vocab_size
             self.mapping2id[key] = key_id[0]
@@ -109,13 +107,9 @@ class MIntRec2:
         return utt_prefix_ids
 
     def setup(self):
-        self.kg_retrieval = MIntRec2.read_data(
-            "src/data/MintRec2/knowledge_retrieval.tsv"
-        )
+        self.kg_retrieval = MIntRec2.read_data("src/data/MintRec2/knowledge_retrieval.tsv")
 
-        with open(
-            "src/data/MintRec2/atomic.csv", mode="r", newline="", encoding="utf-8"
-        ) as file:
+        with open("src/data/MintRec2/atomic.csv", mode="r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file)
             next(reader)
             self.atomic_data = [row for row in reader]
@@ -128,9 +122,7 @@ class MIntRec2:
         torch.save(MMDataset(self.test_data), "src/data/test_data.pth")
         torch.save(MMDataset(self.train_data), "src/data/train_data.pth")
 
-        self.tokenizer.save_pretrained(
-            "C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/tokenizer"
-        )
+        self.tokenizer.save_pretrained("C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/tokenizer")
         torch.save(
             self.mapping2id,
             "C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/mapping2id.pth",
@@ -171,49 +163,33 @@ class MIntRec2:
 
             speakers.append(row[7])
 
-            tmp_atomic = next(
-                (entry for entry in self.atomic_data if index in entry), None
-            )
+            tmp_atomic = next((entry for entry in self.atomic_data if index in entry), None)
 
             atomic["oReact"] = (
                 atomic["oReact"]
                 + [f"<<oReact{row[1]}>>"]
-                + MIntRec2.clean_tokens(
-                    MIntRec2.split_token(f"Others feel {tmp_atomic[2]}")
-                )
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"Others feel {tmp_atomic[2]}"))
             )
             atomic["xReact"] = (
                 atomic["xReact"]
                 + [f"<<xReact{row[1]}>>"]
-                + MIntRec2.clean_tokens(
-                    MIntRec2.split_token(f"{row[7]} feels {tmp_atomic[8]}")
-                )
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]} feels {tmp_atomic[8]}"))
             )
 
-            tmp_retrieval = next(
-                (entry for entry in self.kg_retrieval if index in entry), None
-            )
+            tmp_retrieval = next((entry for entry in self.kg_retrieval if index in entry), None)
 
             retrieval["oReact"] = (
                 retrieval["oReact"]
                 + [f"<<oReact{row[1]}>>"]
-                + MIntRec2.clean_tokens(
-                    MIntRec2.split_token(f"Others feel {tmp_retrieval[1]}")
-                )
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"Others feel {tmp_retrieval[1]}"))
             )
             retrieval["xReact"] = (
                 retrieval["xReact"]
                 + [f"<<xReact{row[1]}>>"]
-                + MIntRec2.clean_tokens(
-                    MIntRec2.split_token(f"{row[7]} feels {tmp_retrieval[2]}")
-                )
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]} feels {tmp_retrieval[2]}"))
             )
 
-            word = (
-                word
-                + [f"<<U{row[1]}>>"]
-                + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]}: {row[2]}"))
-            )
+            word = word + [f"<<U{row[1]}>>"] + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]}: {row[2]}"))
 
             _word_bpes, word_bpes = self.tokenize_tokens(word)
             _, word_atomic_xReact = self.tokenize_tokens(atomic["xReact"])
@@ -279,18 +255,10 @@ class MIntRec2:
                     "word_retrieval_oReact": torch.LongTensor(word_retrieval_oReact),
                     "len_word_retrieval_oReact": len(word_retrieval_oReact),
                     "utt_prefix_ids": torch.LongTensor(utt_prefix_ids),
-                    "atomic_prefix_ids_xReact": torch.LongTensor(
-                        atomic_prefix_ids_xReact
-                    ),
-                    "atomic_prefix_ids_oReact": torch.LongTensor(
-                        atomic_prefix_ids_oReact
-                    ),
-                    "retrieval_prefix_ids_xReact": torch.LongTensor(
-                        retrieval_prefix_ids_xReact
-                    ),
-                    "retrieval_prefix_ids_oReact": torch.LongTensor(
-                        retrieval_prefix_ids_oReact
-                    ),
+                    "atomic_prefix_ids_xReact": torch.LongTensor(atomic_prefix_ids_xReact),
+                    "atomic_prefix_ids_oReact": torch.LongTensor(atomic_prefix_ids_oReact),
+                    "retrieval_prefix_ids_xReact": torch.LongTensor(retrieval_prefix_ids_xReact),
+                    "retrieval_prefix_ids_oReact": torch.LongTensor(retrieval_prefix_ids_oReact),
                     "utt_xReact_mask": torch.LongTensor(utt_xReact_mask),
                     "utt_oReact_mask": torch.LongTensor(utt_oReact_mask),
                     "label": benchmarks["intent_labels"][row[3]],

@@ -184,9 +184,7 @@ class FBartEncoder(Seq2SeqEncoder):
 
     def forward(self, src_tokens, src_seq_len):
         batch_size = src_seq_len.shape[0]
-        broad_cast_seq_len = (
-            torch.arange(src_tokens.size(1)).expand(batch_size, -1).to(src_seq_len)
-        )
+        broad_cast_seq_len = torch.arange(src_tokens.size(1)).expand(batch_size, -1).to(src_seq_len)
         mask = broad_cast_seq_len < src_seq_len.unsqueeze(1)
         dict = self.bart_encoder(
             input_ids=src_tokens,

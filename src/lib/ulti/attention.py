@@ -20,9 +20,7 @@ class Attention(nn.Module):
         self.num_heads = num_heads
         self.dropout = dropout
         self.head_dim = embed_dim // num_heads
-        assert (
-            self.head_dim * num_heads == self.embed_dim
-        ), "embed_dim must be divisible by num_heads"
+        assert self.head_dim * num_heads == self.embed_dim, "embed_dim must be divisible by num_heads"
         self.scaling = self.head_dim**-0.5
 
         self.encoder_decoder_attention = encoder_decoder_attention
@@ -33,11 +31,7 @@ class Attention(nn.Module):
         self.cache_key = "encoder_decoder" if self.encoder_decoder_attention else "self"
 
     def _shape(self, tensor, seq_len, bsz):
-        return (
-            tensor.contiguous()
-            .view(seq_len, bsz * self.num_heads, self.head_dim)
-            .transpose(0, 1)
-        )
+        return tensor.contiguous().view(seq_len, bsz * self.num_heads, self.head_dim).transpose(0, 1)
 
     def forward(
         self,
@@ -80,9 +74,7 @@ class Attention(nn.Module):
         if v is not None:
             v = self._shape(v, -1, bsz)
         if saved_state is not None:
-            k, v, key_padding_mask = self._use_saved_state(
-                k, v, saved_state, key_padding_mask, static_kv, bsz
-            )
+            k, v, key_padding_mask = self._use_saved_state(k, v, saved_state, key_padding_mask, static_kv, bsz)
         # Update cache
         layer_state[self.cache_key] = {
             "prev_key": k.view(bsz, self.num_heads, -1, self.head_dim),
@@ -99,9 +91,7 @@ class Attention(nn.Module):
             # if tgt_len <= 512:
             #     import pdb;pdb.set_trace()
             # print(attn_weights.size(), attn_mask.size())
-            attn_weights = (
-                attn_weights.view(bsz, self.num_heads, tgt_len, src_len) + attn_mask
-            )
+            attn_weights = attn_weights.view(bsz, self.num_heads, tgt_len, src_len) + attn_mask
             attn_weights = attn_weights.view(bsz * self.num_heads, tgt_len, src_len)
 
         # import pdb; pdb.set_trace()
@@ -128,9 +118,7 @@ class Attention(nn.Module):
         assert v is not None
         attn_output = torch.bmm(attn_probs, v)
         assert attn_output.size() == (bsz * self.num_heads, tgt_len, self.head_dim)
-        attn_output = (
-            attn_output.transpose(0, 1).contiguous().view(tgt_len, bsz, embed_dim)
-        )
+        attn_output = attn_output.transpose(0, 1).contiguous().view(tgt_len, bsz, embed_dim)
         attn_output = self.out_proj(attn_output)
         if output_attentions:
             attn_weights = attn_weights.view(bsz, self.num_heads, tgt_len, src_len)
@@ -159,16 +147,12 @@ class Attention(nn.Module):
                 assert v is not None
                 v = torch.cat([prev_value, v], dim=1)
         assert k is not None and v is not None
-        prev_key_padding_mask: Optional[Tensor] = saved_state.get(
-            "prev_key_padding_mask", None
-        )
+        prev_key_padding_mask: Optional[Tensor] = saved_state.get("prev_key_padding_mask", None)
         if prev_key_padding_mask is not None:
             if static_kv:
                 new_key_padding_mask = prev_key_padding_mask
             else:
-                new_key_padding_mask = torch.cat(
-                    [prev_key_padding_mask, key_padding_mask], dim=1
-                )
+                new_key_padding_mask = torch.cat([prev_key_padding_mask, key_padding_mask], dim=1)
         else:
             new_key_padding_mask = key_padding_mask
         return k, v, new_key_padding_mask

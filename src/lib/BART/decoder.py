@@ -55,9 +55,7 @@ class CaGFBartDecoder(Seq2SeqDecoder):
             src_tokens = src_tokens.gather(index=first, dim=1)
         word_mapped_tokens = src_tokens.gather(index=src_tokens_index, dim=1)
 
-        tokens = torch.where(
-            mapping_token_mask, tag_mapped_tokens, word_mapped_tokens
-        )  # bsz x max_len
+        tokens = torch.where(mapping_token_mask, tag_mapped_tokens, word_mapped_tokens)  # bsz x max_len
         tokens = tokens.masked_fill(tgt_pad_mask, self.pad_token_id)
 
         if self.training:
@@ -68,9 +66,7 @@ class CaGFBartDecoder(Seq2SeqDecoder):
                 encoder_hidden_states=encoder_outputs,
                 encoder_padding_mask=encoder_pad_mask,
                 decoder_padding_mask=decoder_pad_mask,
-                decoder_causal_mask=self.causal_masks[
-                    : tokens.size(1), : tokens.size(1)
-                ],
+                decoder_causal_mask=self.causal_masks[: tokens.size(1), : tokens.size(1)],
                 return_dict=True,
             )
         else:
@@ -105,11 +101,7 @@ class CaGFBartDecoder(Seq2SeqDecoder):
         )  # bsz x max_len x 1
         tag_scores = F.linear(
             hidden_state,
-            self.dropout_layer(
-                self.decoder.embed_tokens.weight[
-                    self.label_start_id : self.label_end_id
-                ]
-            ),
+            self.dropout_layer(self.decoder.embed_tokens.weight[self.label_start_id : self.label_end_id]),
         )  # bsz x max_len x num_class
 
         src_outputs = state.encoder_output
@@ -117,22 +109,16 @@ class CaGFBartDecoder(Seq2SeqDecoder):
 
         if first is not None:
             mask = first.eq(0)  # bsz x 1 x max_word_len
-            src_outputs = src_outputs.gather(
-                index=first.unsqueeze(2).repeat(1, 1, src_outputs.size(-1)), dim=1
-            )
+            src_outputs = src_outputs.gather(index=first.unsqueeze(2).repeat(1, 1, src_outputs.size(-1)), dim=1)
         else:
             mask = state.encoder_mask.eq(0)
 
         mask = mask.unsqueeze(1)
-        input_embed = self.dropout_layer(
-            self.decoder.embed_tokens(src_tokens)
-        )  # bsz x max_word_len x hidden_size
+        input_embed = self.dropout_layer(self.decoder.embed_tokens(src_tokens))  # bsz x max_word_len x hidden_size
 
         src_outputs = (src_outputs + input_embed) / 2
 
-        word_scores = torch.einsum(
-            "blh,bnh->bln", hidden_state, src_outputs
-        )  # bsz x max_len x max_word_len
+        word_scores = torch.einsum("blh,bnh->bln", hidden_state, src_outputs)  # bsz x max_len x max_word_len
         mask = mask.__or__(src_tokens.eq(2).cumsum(dim=1).ge(1).unsqueeze(1))
         word_scores = word_scores.masked_fill(mask, -1e32)
 

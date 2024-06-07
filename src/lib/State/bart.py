@@ -3,9 +3,7 @@ from src.lib.State import State
 
 
 class BartState(State):
-    def __init__(
-        self, encoder_output, encoder_mask, src_tokens, first, src_embed_outputs
-    ):
+    def __init__(self, encoder_output, encoder_mask, src_tokens, first, src_embed_outputs):
         super().__init__(encoder_output, encoder_mask)
         self.past_key_values = None
         self.src_tokens = src_tokens
@@ -26,9 +24,7 @@ class BartState(State):
                     new_layer_ = {}
                     for key2 in list(layer[key1].keys()):
                         if layer[key1][key2] is not None:
-                            layer[key1][key2] = self._reorder_state(
-                                layer[key1][key2], indices
-                            )
+                            layer[key1][key2] = self._reorder_state(layer[key1][key2], indices)
                         new_layer_[key2] = layer[key1][key2]
                     new_layer[key1] = new_layer_
                 new.append(new_layer)
