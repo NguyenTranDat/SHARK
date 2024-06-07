@@ -1,0 +1,402 @@
+Dialogue_id	Utterance_id	Text	Label	Start_timestamp	End_timestamp	Source	speakername
+0	0	so without further ado, to welcome our newest part-time employee, emma dubanowski.	Introduce	00:00:02,035	00:00:09,309	superstore	Glenn
+0	1	oh, there's more.	UNK	00:00:17,050	00:00:19,920	superstore	Amy
+0	2	adorable.	UNK	00:00:27,127	00:00:28,328	superstore	Jonah
+0	3	oh, i keep a copy of all the photos employees get developed here.	Inform	00:00:31,064	00:00:33,901	superstore	Glenn
+0	4	you don't have any of my photos, because i don't pose for them.	Explain	00:00:35,636	00:00:38,305	superstore	Dina
+0	5	anyway, over the years, we've watched amy's daughter emma grow.	Inform	00:00:44,144	00:00:51,184	superstore	Glenn
+0	6	who could forget the time that she lost a tooth right here in the store and elias ate it 'cause he thought it was a chiclet?	UNK	00:00:51,218	00:00:57,791	superstore	Glenn
+0	7	oh, also, starting today is kelly watson.	Inform	00:01:15,776	00:01:19,947	superstore	Glenn
+0	8	hi, everyone.	Greet	00:01:19,980	00:01:22,916	superstore	Kelly
+1	0	oh, excuse me.	Greet	00:01:31,759	00:01:34,828	superstore	Nico
+1	1	um, i don't know his name, and an amazing butt?	Ask for help	00:01:37,865	00:01:42,903	superstore	Nico
+1	2	okay. well, thank you.	Thank	00:01:46,406	00:01:49,643	superstore	Nico
+1	3	you're starting to move on from jeff.	UNK	00:01:51,979	00:01:53,781	superstore	Cheyenne
+1	4	oh, i just like flirting with him.	Explain	00:01:53,814	00:01:55,082	superstore	Nico
+1	5	i mean, just because you're not gonna buy doesn't mean you can't check out the merchandise, right?	Confirm	00:01:55,115	00:02:00,220	superstore	Nico
+1	6	ew. so are you just gonna stand there till he comes out?	Confirm	00:02:00,253	00:02:04,758	superstore	Cheyenne
+1	7	this whole job is standing places.	Introduce	00:02:07,895	00:02:09,963	superstore	Nico
+1	8	okay.	Agree	00:02:11,131	00:02:12,132	superstore	Cheyenne
+3	0	dina, i'm with a customer right now.	Inform	00:03:37,818	00:03:39,820	superstore	Garrett
+3	1	oh. i'm sorry.	Apologise	00:03:39,853	00:03:42,155	superstore	Dina
+3	2	step back, please. can i just put this step back.	Arrange	00:03:42,189	00:03:45,225	superstore	Dina
+3	3	i have been experiencing some anxiety recently, and...	Complain	00:03:47,995	00:03:52,499	superstore	Dina
+3	4	actually, two shrinks. one's a control.	UNK	00:03:55,869	00:03:58,105	superstore	Dina
+3	5	okay. well, um, maybe we just take a little break.	Advise	00:04:01,474	00:04:05,512	superstore	Garrett
+3	6	oh.	Acknowledge	00:04:07,480	00:04:08,849	superstore	Dina
+3	7	yeah, that would probably be good.	Agree	00:04:08,882	00:04:10,183	superstore	Dina
+3	8	at least until i get my head together.	UNK	00:04:10,217	00:04:13,253	superstore	Dina
+3	9	we can't take that back if it's broken.	Warn	00:04:13,286	00:04:16,857	superstore	Dina
+5	0	okay. so flip, flip, voilà. got it?	Confirm	00:04:51,191	00:04:54,895	superstore	Amy
+5	1	relax. it's just dad.	Explain	00:04:58,065	00:05:00,333	superstore	superstore person1
+5	2	okay, it's flip...	UNK	00:05:02,035	00:05:04,337	superstore	superstore person1
+5	3	uh, inside joke. you wouldn't get it.	Taunt	00:05:07,374	00:05:10,277	superstore	superstore person1
+5	4	it was just something that happened at six flags.	Explain	00:05:13,513	00:05:16,049	superstore	superstore person1
+5	5	oh!	UNK	00:05:16,083	00:05:17,117	superstore	Amy
+5	6	you guys went to six flags.	UNK	00:05:17,150	00:05:18,919	superstore	Amy
+5	7	fun. cool, cool, cool.	UNK	00:05:18,952	00:05:22,055	superstore	Amy
+5	8	um, is this right?	Confirm	00:05:22,089	00:05:24,024	superstore	superstore person1
+5	9	i mean, i know i said you were too young, but, eh...	UNK	00:05:30,964	00:05:33,934	superstore	Amy
+5	10	oh.	Acknowledge	00:05:38,338	00:05:39,472	superstore	Amy
+5	11	so many activities.	UNK	00:05:39,506	00:05:41,074	superstore	Amy
+6	0	no, i mean, obviously, i want her to love her dad, and all of a sudden, they're like besties.	Explain	00:05:49,516	00:05:55,322	superstore	Amy
+6	1	i thought latinos don't care if their kids like them.	Taunt	00:05:55,355	00:05:56,623	superstore	Jonah
+6	2	i really think you're painting with too broad a cultural brush here.	Taunt	00:05:56,656	00:05:59,359	superstore	Amy
+6	3	i don't know. maybe i should be a little less strict with her, at least until i'm number one again.	UNK	00:06:10,403	00:06:15,142	superstore	Amy
+6	4	you're an intense mom.	Taunt	00:06:15,175	00:06:17,110	superstore	Jonah
+6	5	i do not want to be around when emma starts dating.	Taunt	00:06:17,144	00:06:19,212	superstore	Jonah
+6	6	why would you even mention that?	Criticize	00:06:19,246	00:06:21,949	superstore	Amy
+7	0	hey.	Greet	00:06:35,295	00:06:36,329	superstore	Garrett
+7	1	hey...garrett.	Greet	00:06:36,363	00:06:39,232	superstore	Cheyenne
+7	2	how's it going, big guy?	Care	00:06:39,266	00:06:40,700	superstore	Glenn
+7	3	i'm fine.	UNK	00:06:40,733	00:06:42,335	superstore	Garrett
+7	4	you could join us if you want.	Invite	00:06:46,273	00:06:47,607	superstore	Justine
+7	5	well, you know, 'cause of what happened.	Explain	00:06:50,110	00:06:53,413	superstore	Cheyenne
+7	6	with you and dina.	UNK	00:06:53,446	00:06:56,116	superstore	Cheyenne
+7	7	you are going to find someone so great.	Comfort	00:06:59,452	00:07:01,955	superstore	Glenn
+7	8	no.	UNK	00:07:06,659	00:07:08,428	superstore	Cheyenne
+8	0	i know it's not six flags, but go backs can be fun.	UNK	00:07:12,765	00:07:17,137	superstore	Amy
+8	1	i like the enthusiasm!	Praise	00:07:25,312	00:07:27,647	superstore	Glenn
+8	2	so how's school? what's going on?	Care	00:07:35,755	00:07:38,025	superstore	Amy
+8	3	hot goss?	Confirm	00:07:39,526	00:07:41,094	superstore	superstore person1
+8	4	you know what i mean. come on, spill it, girl.	Advise	00:07:41,128	00:07:42,562	superstore	Amy
+8	5	excuse me. you were gonna check to see if you had any floor cleaner in the back?	Confirm	00:07:42,595	00:07:45,665	superstore	superstore person2
+8	6	listen, if you don't feel like doing something, don't waste my time.	Warn	00:07:48,235	00:07:50,703	superstore	superstore person2
+8	7	excuse me, sir.	Criticize	00:07:50,737	00:07:52,339	superstore	Amy
+8	8	also, you're upset about floor cleaner.	UNK	00:07:55,342	00:07:57,110	superstore	Amy
+8	9	who even uses floor cleaner anymore?	Taunt	00:07:57,144	00:07:59,046	superstore	Amy
+8	10	what are you, an orderly from the '50s?	Taunt	00:07:59,079	00:08:00,713	superstore	Amy
+8	11	right. so go away.	UNK	00:08:02,282	00:08:04,217	superstore	Amy
+8	12	wow.	Praise	00:08:06,619	00:08:08,455	superstore	superstore person1
+8	13	that was awesome.	Praise	00:08:08,488	00:08:09,589	superstore	superstore person1
+8	14	i can be awesome.	Flaunt	00:08:09,622	00:08:12,192	superstore	Amy
+10	1	no wonder this country's a garbage fire.	Complain	00:09:17,257	00:09:19,092	superstore	Dina
+10	2	because she asked me,  what's new with you,  and so i told her.	Explain	00:09:21,361	00:09:24,664	superstore	Dina
+10	3	one of my birds has pinkeye, i broke up with you, and i just signed up for golf lessons.	UNK	00:09:24,697	00:09:27,634	superstore	Dina
+10	4	okay, but you didn't break up with me.	Emphasize	00:09:27,667	00:09:29,402	superstore	Garrett
+10	5	it was mutual, and if anything, i suggested it.	UNK	00:09:29,436	00:09:31,404	superstore	Garrett
+10	6	i don't know. i guess, but...	UNK	00:09:36,843	00:09:38,878	superstore	Garrett
+10	7	well, there you go, champ.	Taunt	00:09:38,911	00:09:40,280	superstore	Dina
+10	8	i'm sorry. do you know what a softline is?	Ask for help	00:09:46,153	00:09:48,288	superstore	Kelly
+10	9	i don't have time for this.	Leave	00:09:48,321	00:09:50,723	superstore	Garrett
+10	10	excuse me.	Greet	00:09:50,757	00:09:52,425	superstore	Kelly
+10	11	do you know what a softline is?	Ask for help	00:09:52,459	00:09:54,194	superstore	Kelly
+10	12	i don't live here. i'm from tampa.	Leave	00:09:54,227	00:09:56,463	superstore	superstore person4
+11	0	huh?	UNK	00:10:00,633	00:10:01,701	superstore	Amy
+11	1	wow.	UNK	00:10:08,675	00:10:10,743	superstore	Amy
+11	2	oh, i haven't told him.	UNK	00:10:14,481	00:10:15,815	superstore	superstore person1
+11	3	nice.	UNK	00:10:15,848	00:10:17,150	superstore	Amy
+11	4	oh, uh, no, you're not done.	Inform	00:10:17,184	00:10:19,852	superstore	Amy
+11	5	well, because the floor is still slippery.	Explain	00:10:22,489	00:10:26,326	superstore	Amy
+11	6	okay. fine.	Agree	00:10:26,359	00:10:28,528	superstore	superstore person1
+11	7	how about you and i go get a soda?	Invite	00:10:35,902	00:10:38,338	superstore	Amy
+11	8	slippery floors, that could be our little inside thing.	UNK	00:10:39,906	00:10:42,609	superstore	Amy
+12	0	she could be zoning, she could be cleaning, but no.	UNK	00:10:59,459	00:11:02,229	superstore	Amy
+12	1	first, she's texting at work.	UNK	00:11:09,102	00:11:10,670	superstore	Amy
+12	2	and then she's not doing her homework.	Criticize	00:11:10,703	00:11:13,006	superstore	Amy
+12	3	and then she's hanging out with the bad kids.	Criticize	00:11:13,040	00:11:15,242	superstore	Amy
+12	4	yes. actually, yeah. that would be great.	Agree	00:11:26,086	00:11:29,289	superstore	Amy
+12	5	oh, no, no, no, no. i was just kidding.	Explain	00:11:29,322	00:11:31,058	superstore	Jonah
+12	6	i never yell. even when i'm mad, i just push it down really deep, and then sometimes i wake up in the middle of the night, panicked and sweaty for no reason.	UNK	00:11:31,091	00:11:39,332	superstore	Jonah
+13	0	oh.   i'm, like, obsessed with the gym.	UNK	00:11:41,134	00:11:44,571	superstore	Nico
+13	1	i mean, whatever you're doing, it's...  it's working.	UNK	00:11:52,245	00:11:55,782	superstore	superstore person2
+13	2	oh.   hey, um, you think i could get that badge for the bathroom again?	Ask for help	00:11:55,815	00:12:01,688	superstore	superstore person2
+13	3	oh. oof. um. you know what?	UNK	00:12:01,721	00:12:05,058	superstore	Nico
+13	4	i would love to, um, but i could actually get into trouble with my boss.	Explain	00:12:05,092	00:12:09,596	superstore	Nico
+13	5	oh.	Acknowledge	00:12:09,629	00:12:11,331	superstore	superstore person2
+13	6	yeah, i mean, i am a bad boy, but not that way.	Explain	00:12:11,364	00:12:16,669	superstore	Nico
+13	7	sure. i'll just, uh...	UNK	00:12:16,703	00:12:18,838	superstore	superstore person2
+13	8	we haven't even traded stretching tips yet.	UNK	00:12:23,243	00:12:26,213	superstore	Nico
+14	0	i'm sorry about before.	Apologise	00:12:32,119	00:12:33,253	superstore	superstore person3
+14	1	i hadn't eaten anything, and, uh, i got a weird call from my wife.	Explain	00:12:33,286	00:12:36,289	superstore	superstore person3
+14	2	okay, let me stop you right there.	Prevent	00:12:36,323	00:12:37,724	superstore	Amy
+14	3	i was wrong for yelling at you earlier.	Apologise	00:12:37,757	00:12:39,726	superstore	Amy
+14	4	okay.	Acknowledge	00:12:45,798	00:12:46,833	superstore	superstore person3
+14	5	so if you wanted to, like, go over there and really give it to her, that would be fine.	Advise	00:12:46,866	00:12:51,171	superstore	Amy
+14	6	obviously, don't hit her, but if you wanted to shake her a little, that would be cool.	Advise	00:12:52,905	00:12:57,377	superstore	Amy
+14	7	i'm not gonna shake a little girl.	Oppose	00:12:57,410	00:12:59,112	superstore	superstore person3
+14	8	no, no, i'm her mom. i'm not gonna report it.	Explain	00:12:59,146	00:13:01,581	superstore	Amy
+16	0	it's a can.	Introduce	00:13:57,604	00:13:59,406	superstore	superstore person1
+16	1	sure, yeah, yeah, it's a can, we don't really organize things here by shape.	Explain	00:13:59,439	00:14:05,178	superstore	Jonah
+16	2	so it's not like the cans go over here and the boxes go over there.	UNK	00:14:05,212	00:14:09,716	superstore	Jonah
+16	3	whatever.	UNK	00:14:09,749	00:14:11,184	superstore	superstore person1
+16	4	no, not no. no!	Oppose	00:14:11,218	00:14:13,553	superstore	Jonah
+16	5	not whatever, okay...	UNK	00:14:13,586	00:14:15,188	superstore	Jonah
+16	6	you got to put that phone away too.	Arrange	00:14:16,923	00:14:18,225	superstore	Jonah
+16	7	you're not my boss.	Oppose	00:14:18,258	00:14:19,559	superstore	superstore person1
+16	8	wha what is wrong with you? she's a child!	Criticize	00:14:31,538	00:14:33,973	superstore	Glenn
+16	9	well, i'm the one who's yelling now!	UNK	00:14:42,014	00:14:43,883	superstore	Glenn
+16	10	okay? how you like that, mister?	UNK	00:14:43,916	00:14:45,985	superstore	Glenn
+16	11	i don't...	UNK	00:14:46,018	00:14:47,520	superstore	Jonah
+16	12	not so hot, huh?	Criticize	00:14:47,554	00:14:49,356	superstore	Glenn
+16	13	huh?	UNK	00:14:49,389	00:14:50,557	superstore	Glenn
+17	0	come on. i got it. i got it.	UNK	00:15:00,367	00:15:01,968	superstore	superstore person2
+17	1	can i ask you something?	Ask for help	00:15:05,805	00:15:07,774	superstore	superstore person2
+17	2	you can't use my bathroom pass.	UNK	00:15:07,807	00:15:10,243	superstore	Cheyenne
+17	3	bathroom pass?	Confirm	00:15:10,277	00:15:11,511	superstore	superstore person2
+17	4	you seem like you are way too pretty to be working here.	Praise	00:15:18,551	00:15:21,521	superstore	superstore person2
+17	5	come on.	UNK	00:15:21,554	00:15:22,755	superstore	superstore person2
+17	6	you have a nice smile.	Praise	00:15:26,025	00:15:27,927	superstore	superstore person2
+17	7	what?	UNK	00:15:27,960	00:15:29,729	superstore	Cheyenne
+17	8	you have a nice smile.	Praise	00:15:31,364	00:15:33,700	superstore	Cheyenne
+17	9	thanks. oh, my shirt is soaked.	UNK	00:15:33,733	00:15:39,272	superstore	superstore person2
+17	10	o...kay, what?	UNK	00:15:39,306	00:15:44,277	superstore	Cheyenne
+19	0	i, u i messed up before. i'm sorry.	Apologise	00:16:59,018	00:17:01,454	superstore	Jonah
+19	1	i was listening, but i wasn't really hearing.	Explain	00:17:01,488	00:17:05,758	superstore	Jonah
+19	2	tonight, gonna pop open a couple brewskis, we're gonna get ourselves a nice pie pizza pie, and we are gonna watch ourselves a little movie called  bad boys 2  and get you through this breakup thing roomie-style.	Plan	00:17:07,159	00:17:21,974	superstore	Jonah
+19	3	all right. that's enough.	Agree	00:17:23,843	00:17:26,713	superstore	Garrett
+19	4	attention, cloud 9 employees!	Inform	00:17:26,746	00:17:28,681	superstore	Garrett
+19	5	dina did not break up with me, and actually, if you want to get real about it, it was my idea.	Inform	00:17:30,583	00:17:37,624	superstore	Garrett
+19	6	i was trying to be a nice guy.	Inform	00:17:37,657	00:17:39,158	superstore	Garrett
+19	7	so if you want to feel bad for somebody, 'cause she's the one seeing the shrink.	UNK	00:17:41,093	00:17:46,132	superstore	Garrett
+19	8	whoa.	UNK	00:17:46,165	00:17:49,068	superstore	Garrett
+19	9	sorry about that.	Apologise	00:17:53,205	00:17:54,841	superstore	Garrett
+19	10	please pretend you didn't hear that.	Advise	00:17:54,874	00:17:56,643	superstore	Garrett
+19	11	i'm gonna just put these back.	Plan	00:17:59,912	00:18:03,015	superstore	Jonah
+20	0	oh, hey, is this where justine fell?	Confirm	00:18:06,619	00:18:08,655	superstore	Glenn
+20	1	yeah.	Agree	00:18:08,688	00:18:10,189	superstore	Amy
+20	2	i gotta write it up for her workman's comp claim.	Plan	00:18:10,222	00:18:13,826	superstore	Glenn
+20	3	do you think emma's doing okay?	Confirm	00:18:24,070	00:18:27,540	superstore	Amy
+20	4	i just feel like i'm losing control.	Complain	00:18:45,992	00:18:47,794	superstore	Amy
+20	5	amy, can i ask you something but without you taking it the wrong way?	Confirm	00:18:47,827	00:18:52,198	superstore	Glenn
+20	6	sure.	Agree	00:18:52,231	00:18:53,566	superstore	Amy
+20	7	she's secretive. she's distant.	UNK	00:19:04,577	00:19:06,913	superstore	Amy
+20	8	anytime.	UNK	00:19:14,721	00:19:16,656	superstore	Glenn
+20	9	i can go back to yelling at her.	UNK	00:19:16,689	00:19:17,857	superstore	Amy
+20	10	mm-hmm. fun.	UNK	00:19:17,890	00:19:21,260	superstore	Glenn
+21	0	when he smiles at you, it feels like the sun is coming up.	Praise	00:19:21,293	00:19:26,032	superstore	Cheyenne
+21	1	that's the first time that's happened since jeff.	UNK	00:19:29,536	00:19:31,237	superstore	Nico
+21	2	well, scott is way cuter than jeff.	Praise	00:19:31,270	00:19:32,972	superstore	Cheyenne
+21	3	i'm sorry.   love you.	Apologise	00:19:36,075	00:19:38,811	superstore	Nico
+21	4	you wouldn't want it to get...lost.	UNK	00:19:43,082	00:19:45,552	superstore	Carol
+21	5	oops.	UNK	00:19:45,585	00:19:46,686	superstore	Carol
+21	6	oh.	UNK	00:19:46,719	00:19:48,154	superstore	superstore person2
+21	7	i don't know.	UNK	00:19:51,791	00:19:53,926	superstore	Nico
+22	0	i got carried away, and... it wasn't cool.	Apologise	00:20:00,800	00:20:03,302	superstore	Garrett
+22	1	it's okay. um...	UNK	00:20:03,335	00:20:05,204	superstore	Dina
+22	2	it is possible, yeah.	UNK	00:20:08,775	00:20:10,176	superstore	Garrett
+22	3	are you saying you want to get back together?	Confirm	00:20:17,584	00:20:20,620	superstore	Garrett
+22	4	i mean, is that crazy?	Confirm	00:20:20,653	00:20:24,090	superstore	Dina
+22	5	i don't think so. let's do it.	Advise	00:20:24,123	00:20:27,560	superstore	Garrett
+22	6	okay.	Agree	00:20:27,594	00:20:30,129	superstore	Dina
+22	7	yeah, this isn't working out. i'm dumping you.	Oppose	00:20:30,162	00:20:32,932	superstore	Dina
+22	8	sir, did you just see that i dumped him?	Confirm	00:20:34,967	00:20:37,136	superstore	Dina
+22	9	attention, cloud 9 employees.	Inform	00:20:38,638	00:20:40,106	superstore	Dina
+22	10	we have a nonverbal confirmation i dumped garrett.	Inform	00:20:40,139	00:20:43,676	superstore	Dina
+22	11	you're a monster.	Criticize	00:20:43,710	00:20:44,911	superstore	Garrett
+24	0	hey!	Greet	00:00:10,077	00:00:11,579	superstore	Jonah
+24	1	um, just some stuff.	Explain	00:00:12,913	00:00:14,682	superstore	superstore person1
+24	2	yeah.	Agree	00:00:18,819	00:00:20,087	superstore	superstore person1
+24	3	well, you put it back.	Arrange	00:00:20,120	00:00:22,656	superstore	Jonah
+24	4	uh, i don't think i'm gonna.	Oppose	00:00:22,690	00:00:24,525	superstore	superstore person1
+24	5	well, i caught you, so, you have to.	Explain	00:00:24,558	00:00:28,462	superstore	Jonah
+24	6	um, i don't think i do.	UNK	00:00:28,496	00:00:29,863	superstore	superstore person1
+24	7	but that's how this works.	Emphasize	00:00:29,897	00:00:32,866	superstore	Jonah
+24	8	no, don't just no. don't take more.	Prevent	00:00:32,900	00:00:35,903	superstore	Jonah
+24	9	do you have a gun?	Confirm	00:00:35,936	00:00:36,937	superstore	superstore person1
+24	10	maybe i do.	UNK	00:00:38,171	00:00:41,542	superstore	Jonah
+24	11	uh, i don't think you do.	Oppose	00:00:41,575	00:00:43,677	superstore	superstore person1
+24	12	well, i don't think you do, so, you know, it's a tie.	UNK	00:00:43,711	00:00:47,548	superstore	Jonah
+24	13	okay. excuse me.	Leave	00:00:50,651	00:00:53,153	superstore	superstore person1
+24	14	oh. wait!	Prevent	00:00:53,186	00:00:54,655	superstore	Jonah
+24	15	no, no, no, no! no, he no.	Prevent	00:00:54,688	00:00:55,956	superstore	Jonah
+24	16	jonah, call the police! right.	Arrange	00:01:05,633	00:01:08,101	superstore	Dina
+24	17	look who's grounded now.	Taunt	00:01:08,135	00:01:10,738	superstore	Dina
+24	18	jonah, i just did a  law & order  type zinger.	Flaunt	00:01:10,771	00:01:14,107	superstore	Dina
+24	19	oh, he's calling the police.	UNK	00:01:14,141	00:01:15,843	superstore	Dina
+25	0	i saw immediately it was a 487 in progress.	Flaunt	00:01:23,717	00:01:26,086	superstore	Dina
+25	1	i don't know what he could have done to you beforehand, but it is not your fault if he touched you.	Comfort	00:01:39,032	00:01:42,536	superstore	Dina
+25	2	okay, okay. nothing happened.	Explain	00:01:42,570	00:01:43,837	superstore	Jonah
+25	3	end of story.	Inform	00:01:45,639	00:01:46,874	superstore	Jonah
+25	4	and you made no attempt to stop him?	Doubt	00:01:46,907	00:01:48,542	superstore	superstore person2
+25	5	no, i mean, i told him to stop, but he didn't.	Explain	00:01:48,576	00:01:51,912	superstore	Jonah
+25	6	and then he asked me to move and just took off.	UNK	00:01:51,945	00:01:54,982	superstore	Jonah
+25	7	he asked you to move out of the way so he could leave with the cash, and you just did it?	Confirm	00:01:56,650	00:02:00,888	superstore	Dina
+25	8	so it was for of, like, a reflex.	Explain	00:02:03,624	00:02:05,826	superstore	Jonah
+27	0	listen, her mind's mostly gone, but she raises a good point.	UNK	00:04:27,968	00:04:30,838	superstore	Dina
+27	1	oh, so are you just going to be calm when a group of methed out serial killers stabs myrtle to death in the parking lot?	Doubt	00:04:40,147	00:04:45,953	superstore	Dina
+27	2	no, because that would be a different tone.	Explain	00:04:45,986	00:04:47,387	superstore	Jonah
+27	3	is it about your boots?	Confirm	00:04:52,525	00:04:55,028	superstore	Cheyenne
+27	4	uh, no.	Oppose	00:04:55,062	00:04:57,064	superstore	Jeff
+27	5	um, it's about this morning's incident.	Explain	00:04:57,097	00:04:58,799	superstore	Jeff
+27	6	is that when you bought your boots?	Confirm	00:04:58,832	00:05:02,069	superstore	Garrett
+28	0	what i'm saying is, don't do what dina did.	Inform	00:05:28,862	00:05:32,532	superstore	Jeff
+28	1	and while it worked out okay this time, it could have turned into serious injury, or death, or god forbid, a lawsuit.	Warn	00:05:39,139	00:05:45,278	superstore	Jeff
+28	2	just stand there and make brown, like jonah?	Taunt	00:05:58,391	00:06:01,161	superstore	Dina
+28	3	well, i didn't actually do anything	Explain	00:06:02,595	00:06:04,197	superstore	Jonah
+28	4	exactly. he just sat there and watched a guy rob the store.	Criticize	00:06:04,231	00:06:07,434	superstore	Dina
+28	5	thank you. that is what you should all do in the future.	Thank	00:06:07,467	00:06:11,271	superstore	Jeff
+28	6	thank you, jonah, for actually following protocol.	Thank	00:06:11,304	00:06:14,808	superstore	Jeff
+28	7	oh, well, yeah. i mean, you know, you guys came up with the policy.	UNK	00:06:14,842	00:06:19,412	superstore	Jonah
+28	8	what then? do you want me to just sit there and watch someone take a baby?	Doubt	00:06:26,619	00:06:31,291	superstore	Dina
+28	9	what if the baby is wearing a bomb?	Doubt	00:06:31,324	00:06:33,894	superstore	Cheyenne
+28	10	then wouldn't you want him to steal it?	Doubt	00:06:33,927	00:06:35,295	superstore	Cheyenne
+29	0	oh, yeah. yeah.	Agree	00:07:32,519	00:07:34,187	superstore	superstore person3
+29	1	yes, yes. and i'm so sorry.	Apologise	00:07:48,936	00:07:51,404	superstore	superstore person3
+29	2	you know, it just it takes me forever to get going in the morning.	Explain	00:07:51,438	00:07:54,942	superstore	superstore person3
+29	3	i like to wake up when my body is ready, you know what i mean?	Confirm	00:07:57,044	00:07:59,579	superstore	superstore person3
+29	4	but we've talked about this before.	UNK	00:07:59,612	00:08:03,516	superstore	Glenn
+29	5	and i think it's time for you to go.	UNK	00:08:03,550	00:08:06,954	superstore	Glenn
+29	6	no, it's nothing to be sorry about.	UNK	00:08:10,523	00:08:14,061	superstore	superstore person3
+29	7	god bless.	UNK	00:08:14,094	00:08:15,495	superstore	Glenn
+29	8	jerusha, how was it? i feel sick!	Complain	00:08:19,599	00:08:23,636	superstore	Glenn
+30	0	all right. here you go.	UNK	00:08:23,670	00:08:26,406	superstore	Jonah
+30	1	this little girl won't try and stop you.	Taunt	00:08:31,444	00:08:33,180	superstore	Dina
+30	2	i'm just i'm gonna go pay for it.	Leave	00:08:40,087	00:08:41,955	superstore	superstore person4
+31	0	hey.	Greet	00:09:13,020	00:09:15,488	superstore	Amy
+31	1	oh, turkey sandwich.	UNK	00:09:15,522	00:09:17,557	superstore	Amy
+31	2	that's just a little random fact that i knew.	UNK	00:09:25,098	00:09:27,134	superstore	Amy
+31	3	i don't think that's true. well, it is true.	Oppose	00:09:48,188	00:09:50,690	superstore	Kelly
+31	4	i know it's true because i just looked it up.	Explain	00:09:50,723	00:09:53,593	superstore	Amy
+31	5	okay.   so did he invent salad?	Confirm	00:09:53,626	00:09:57,297	superstore	Cheyenne
+32	0	ken? you're you're here.	Doubt	00:10:06,839	00:10:09,809	superstore	Glenn
+32	1	big time!	UNK	00:10:09,842	00:10:12,579	superstore	superstore person3
+32	2	okay, um, look, maybe i wasn't clear, and that's my fault.	Apologise	00:10:12,612	00:10:17,584	superstore	Glenn
+32	3	but what i meant to say was, i don't want you to be the security guard here anymore.	UNK	00:10:17,617	00:10:23,590	superstore	Glenn
+32	4	i don't know anything about security.	UNK	00:10:34,867	00:10:36,736	superstore	superstore person3
+32	5	okay. okay.	Acknowledge	00:10:36,769	00:10:38,338	superstore	Glenn
+32	6	yes, thanks. yes, yes.	Thank	00:10:38,371	00:10:41,408	superstore	superstore person3
+35	0	you. you're the	UNK	00:14:30,503	00:14:31,671	superstore	Amy
+35	1	you're the cool kids.	Praise	00:14:31,704	00:14:33,440	superstore	Amy
+35	2	oh, no. none of us get invited to that.	Oppose	00:14:38,678	00:14:41,981	superstore	Sandra
+35	3	that thing is lame anyway.	Complain	00:14:42,014	00:14:43,516	superstore	Amy
+35	4	hey, what if we did something?	Advise	00:14:43,550	00:14:46,553	superstore	Amy
+35	5	yes! all right.	Agree	00:14:52,459	00:14:53,793	superstore	Amy
+35	6	let's do it! bowling night!	Advise	00:14:53,826	00:14:56,329	superstore	Amy
+35	7	i bet they have those wings, and they serve them with ranch dressing.	UNK	00:14:56,363	00:14:59,699	superstore	Sandra
+35	8	yeah. maybe.	Agree	00:15:01,000	00:15:02,902	superstore	Amy
+35	9	wow. yeah.	Agree	00:15:18,518	00:15:20,953	superstore	Amy
+35	10	i can't.	Oppose	00:15:32,999	00:15:34,834	superstore	Amy
+35	11	um, oh. uh, no.	Oppose	00:15:37,704	00:15:42,141	superstore	Amy
+36	0	it's my first write up. ever.	Flaunt	00:15:48,748	00:15:50,817	superstore	Dina
+36	1	so thank you so much for that.	Thank	00:15:50,850	00:15:52,585	superstore	Dina
+36	2	i just came over to ask you in the most polite way possible to please clean up the spill in aisle nine.	Explain	00:15:56,989	00:16:03,463	superstore	Dina
+36	3	i'm glad you got written up. you are a bully.	Criticize	00:16:09,969	00:16:13,005	superstore	Jonah
+36	4	well, i'd rather be a bully than a castrated garden gnome.	Taunt	00:16:13,039	00:16:15,908	superstore	Dina
+36	5	well, who knows what's under those little pants?	Taunt	00:16:18,745	00:16:19,979	superstore	Dina
+36	6	that's not the point. the point is, at least i'm not too weak to stop a simple robbery.	Taunt	00:16:20,012	00:16:24,751	superstore	Dina
+36	7	that was an awkward situation. i could have destroyed that guy.	Explain	00:16:24,784	00:16:28,488	superstore	Jonah
+36	8	with muscles like those? come on.	Taunt	00:16:28,521	00:16:30,089	superstore	Dina
+36	9	your ass? yeah, uh, obviously, i could sure.	Agree	00:16:37,530	00:16:40,867	superstore	Jonah
+36	10	oh. well, then come at me.	Invite	00:16:40,900	00:16:42,569	superstore	Dina
+36	11	fight, guys. jonah's fighting dina.	Inform	00:16:52,912	00:16:54,547	superstore	Marcus
+36	12	fight, fight, fight.	UNK	00:17:00,219	00:17:09,962	superstore	Marcus
+37	0	bullies just need to be confronted.	Explain	00:17:16,035	00:17:17,704	superstore	Jonah
+37	1	there. officially off cloud 9 property.	UNK	00:17:17,737	00:17:20,740	superstore	Dina
+37	2	because if you were really a feminist, you'd punch me in the face.	Taunt	00:17:28,815	00:17:31,884	superstore	Dina
+37	3	what does that okay, what are you	UNK	00:17:31,918	00:17:34,153	superstore	Jonah
+37	4	what are you doing? i'm not gonna do that.	UNK	00:17:34,186	00:17:35,922	superstore	Jonah
+37	5	since this morning.	UNK	00:17:39,025	00:17:40,226	superstore	Dina
+37	6	just stop. this is crazy.	Prevent	00:17:41,928	00:17:44,764	superstore	Garrett
+37	7	are you okay? yeah, yeah, i'm good.	Care	00:18:11,223	00:18:12,925	superstore	Garrett
+37	8	really? none of you?	UNK	00:18:26,138	00:18:28,040	superstore	Marcus
+45	0	yeah, i got to go with the cop on this one.	Agree	00:04:21,511	00:04:23,280	superstore	Jonah
+45	1	i just want to cover it up until the coroner gets here.	Explain	00:04:23,313	00:04:27,217	superstore	Glenn
+45	2	i know we don't specifically promise no dead bodies, but we shouldn't have to.	Explain	00:04:29,519	00:04:33,991	superstore	Glenn
+45	3	fine, just don't go touching the body.	Inform	00:04:34,024	00:04:36,326	superstore	Dina
+45	4	i wasn't going to.	UNK	00:04:36,359	00:04:37,961	superstore	Jonah
+45	5	no, i just wouldn't do that.	Oppose	00:04:39,362	00:04:41,231	superstore	Jonah
+45	6	uh, because i said you can't.	Explain	00:04:41,264	00:04:42,900	superstore	Dina
+45	7	why would i'm gonna let you have this one.	UNK	00:04:42,933	00:04:45,235	superstore	Jonah
+45	8	all right, well, that should hold.	Agree	00:04:46,904	00:04:49,239	superstore	Glenn
+45	9	is this worse?	Doubt	00:04:55,178	00:04:56,947	superstore	Glenn
+45	10	i feel like it is.	UNK	00:04:56,980	00:04:58,849	superstore	Glenn
+48	0	like he's a dead employee.	Joke	00:07:34,704	00:07:36,339	superstore	superstore person1
+48	1	no.	Oppose	00:07:37,674	00:07:39,142	superstore	Glenn
+48	2	this is not a halloween display.	Oppose	00:07:39,176	00:07:41,378	superstore	Glenn
+48	3	you crack me up.	UNK	00:07:43,981	00:07:45,348	superstore	Dina
+48	4	it must be so much fun working there.	UNK	00:07:45,382	00:07:47,350	superstore	Dina
+48	5	okay, talk to you later.	UNK	00:07:47,384	00:07:49,286	superstore	Dina
+48	6	that was the coroner's office.	Inform	00:07:49,319	00:07:51,021	superstore	Dina
+48	7	who cares? they're all the same.	UNK	00:07:54,992	00:07:56,426	superstore	Dina
+48	8	the point is, they're not gonna be here for a while.	Emphasize	00:07:56,459	00:07:58,728	superstore	Dina
+48	9	oh, come on.	Complain	00:07:58,761	00:08:00,097	superstore	Glenn
+48	10	i don't know, jodi.	UNK	00:08:03,000	00:08:04,467	superstore	Dina
+48	11	i didn't ask the man every little question in the world.	UNK	00:08:04,501	00:08:06,369	superstore	Dina
+49	0	oh, thanks.	Thank	00:08:32,162	00:08:34,131	superstore	Kelly
+49	1	so, uh...	UNK	00:08:37,067	00:08:39,269	superstore	Kelly
+49	2	i thought you took your lunch break already?	UNK	00:08:44,174	00:08:45,708	superstore	Jonah
+49	3	what do we got here, the lunch police?	Joke	00:08:45,742	00:08:47,477	superstore	Amy
+49	4	take me downtown, officer bumblebee.	Joke	00:08:49,179	00:08:50,780	superstore	Amy
+49	5	kelly, could you jump on register four?	Arrange	00:08:54,317	00:08:56,419	superstore	Amy
+49	6	yeah.	Acknowledge	00:09:05,362	00:09:07,464	superstore	Amy
+49	7	sure, no, yeah. i, um...	UNK	00:09:07,497	00:09:09,432	superstore	Kelly
+49	8	i guess i can eat this on the way.	Leave	00:09:09,466	00:09:12,102	superstore	Kelly
+49	9	yup, that's why they're made to go.	Explain	00:09:12,135	00:09:15,072	superstore	Amy
+49	10	uh oh, phone police.	Joke	00:09:18,508	00:09:20,510	superstore	Amy
+49	11	you'll never take me alive.	Leave	00:09:22,345	00:09:24,047	superstore	Amy
+50	1	there is something there that is extremely disturbing, and it may frighten you.	Inform	00:09:41,498	00:09:46,769	superstore	Glenn
+50	3	they're going the wrong way. yeah.	UNK	00:09:51,774	00:09:53,743	superstore	Glenn
+50	4	please, listen to me.	Inform	00:09:57,280	00:09:59,249	superstore	Glenn
+50	5	the housewares section is very, very scary.	Inform	00:09:59,282	00:10:03,086	superstore	Glenn
+50	6	it will give you nightmares.	Warn	00:10:03,120	00:10:05,222	superstore	Glenn
+50	7	turn back before it's too late.	Warn	00:10:05,255	00:10:07,357	superstore	Glenn
+50	8	no. no, no.	Oppose	00:10:22,439	00:10:24,441	superstore	Jonah
+50	9	you've been warned.	Inform	00:10:24,474	00:10:25,808	superstore	Glenn
+50	10	okay.	Acknowledge	00:10:25,842	00:10:26,876	superstore	Jonah
+52	0	with sal's passport?	Taunt	00:11:16,393	00:11:18,328	superstore	Nico
+52	1	i am a master at make up.	Flaunt	00:11:18,361	00:11:20,230	superstore	Cheyenne
+52	2	if i can make elias look like dame edna, i can make you look like sal.	Flaunt	00:11:20,263	00:11:24,467	superstore	Cheyenne
+52	3	wait, why did elias want to be dame edna?	Doubt	00:11:24,501	00:11:26,369	superstore	Nico
+52	4	i mean...	UNK	00:11:28,271	00:11:29,606	superstore	Nico
+52	5	although me just being here is illegal so it kind of cancels out.	Explain	00:11:31,374	00:11:35,278	superstore	Nico
+52	6	i think...we should...	Agree	00:11:37,347	00:11:39,482	superstore	Nico
+52	7	oh, my god, this is going to be so fun.	UNK	00:11:41,384	00:11:43,453	superstore	Cheyenne
+52	8	we agreed on a kitty cat.	Complain	00:11:46,223	00:11:47,524	superstore	superstore person1
+52	9	she is a kitty cat.	UNK	00:11:47,557	00:11:49,592	superstore	Cheyenne
+53	0	she saw the match before i could get her phone.	Inform	00:12:04,574	00:12:06,876	superstore	Amy
+53	1	oh, okay, we need to  freaky friday  this.	Joke	00:12:06,909	00:12:08,611	superstore	Garrett
+53	2	you need to find a cursed object, have a whirlwind romance with her, but then learn an important life lesson.	Advise	00:12:08,645	00:12:14,251	superstore	Garrett
+53	3	oh, no.	UNK	00:12:18,388	00:12:19,589	superstore	Amy
+53	4	she sent him a wink.	Inform	00:12:19,622	00:12:20,990	superstore	Amy
+53	5	i know it's you, amy. it's all cool.	UNK	00:12:29,299	00:12:30,267	superstore	Amy
+53	6	i have to squash this before jonah finds out.	UNK	00:12:32,502	00:12:34,637	superstore	Amy
+53	7	yeah, as long as they never run into each other in the store they both work in.	Agree	00:12:52,289	00:12:55,692	superstore	Garrett
+53	8	there are, like, dozens of aisles.	UNK	00:12:57,560	00:13:00,530	superstore	Amy
+56	0	you seem good.	Care	00:15:42,725	00:15:44,727	superstore	Kelly
+56	1	i had a bar this morning with like 20 grams of protein.	Explain	00:15:46,195	00:15:49,031	superstore	Jonah
+56	2	no, no listen to your body.	Oppose	00:15:50,467	00:15:51,668	superstore	Kelly
+56	3	yeah.	Agree	00:15:51,701	00:15:53,202	superstore	Jonah
+56	4	oh, no, no, i'm fine.	Oppose	00:15:54,737	00:15:56,539	superstore	Jonah
+56	5	yes.	Agree	00:15:57,840	00:15:59,709	superstore	Kelly
+56	6	you are so strong.	Praise	00:15:59,742	00:16:02,445	superstore	Kelly
+56	7	and i also think you are so brave.	Praise	00:16:02,479	00:16:05,214	superstore	Kelly
+56	8	thank you.	Thank	00:16:05,247	00:16:07,083	superstore	Jonah
+57	0	so you'll have to do the make up yourself for the trip back.	Inform	00:16:07,116	00:16:11,020	superstore	Cheyenne
+57	1	or you could just stay like this the whole time.	Advise	00:16:11,053	00:16:13,122	superstore	Cheyenne
+57	2	what? i was just saying she had really great skin.	Explain	00:16:20,797	00:16:24,200	superstore	superstore person2
+57	3	huh.	UNK	00:16:24,233	00:16:25,668	superstore	Cheyenne
+57	4	uh huh. sure.	UNK	00:16:33,843	00:16:35,144	superstore	superstore person2
+57	5	that's stupid.	Taunt	00:16:39,048	00:16:41,584	superstore	superstore person2
+57	6	i just think it feels really good and firm on my tongue.	Explain	00:16:44,854	00:16:48,658	superstore	superstore person2
+58	0	i don't know why you don't have a gurney.	UNK	00:16:49,692	00:16:51,761	superstore	Dina
+58	1	yeah, i was gonna get one, but they're like a hundred bucks.	Explain	00:16:51,794	00:16:54,230	superstore	superstore person3
+58	2	ah, budget cuts.	UNK	00:16:54,263	00:16:56,032	superstore	Dina
+58	3	thank you, governor greitens.	Thank	00:16:56,065	00:16:57,767	superstore	Dina
+58	4	so where am i supposed to put thing?	UNK	00:16:57,800	00:16:59,836	superstore	superstore person3
+58	5	well, where you normally put it.	UNK	00:16:59,869	00:17:02,839	superstore	Glenn
+58	6	i guess i could put it on my lawn.	Advise	00:17:02,872	00:17:05,608	superstore	superstore person3
+58	7	i guess.	UNK	00:17:05,642	00:17:06,743	superstore	Glenn
+58	8	chuck, what are you doing?	Care	00:17:06,776	00:17:08,110	superstore	superstore person4
+58	9	hummus?	UNK	00:17:09,679	00:17:11,213	superstore	Glenn
+60	0	how could i humiliate you?	Doubt	00:17:47,950	00:17:48,918	superstore	Jonah
+60	1	i barely talk to you.	Explain	00:17:48,951	00:17:49,919	superstore	Jonah
+60	2	hey, guys.	Greet	00:17:49,952	00:17:51,053	superstore	Amy
+60	4	you know what, kelly, i feel like i cut your break short.	Apologise	00:17:52,121	00:17:55,124	superstore	Amy
+60	5	this guy's playing mind games with me all day.	Criticize	00:17:58,728	00:18:01,698	superstore	Kelly
+60	6	i would never do that.	Oppose	00:18:01,731	00:18:02,999	superstore	Jonah
+60	7	i'm an ally.	Emphasize	00:18:03,032	00:18:04,200	superstore	Jonah
+60	8	then explain all those texts!	UNK	00:18:04,233	00:18:06,002	superstore	Kelly
+60	9	i never texted you.	Oppose	00:18:06,035	00:18:08,838	superstore	Jonah
+60	10	stop lying!	Prevent	00:18:08,871	00:18:11,741	superstore	Kelly
+60	11	it was me. i did it.	Explain	00:18:15,945	00:18:16,946	superstore	Amy
+60	12	i took jonah's phone, and i was messing around.	Explain	00:18:16,979	00:18:19,181	superstore	Amy
+60	13	and i accidently swiped right, and i just couldn't stop myself.	Explain	00:18:19,215	00:18:22,284	superstore	Amy
+60	14	and garrett had something to do with it too.	Inform	00:18:22,318	00:18:23,986	superstore	Amy
+60	15	oh.	UNK	00:18:43,906	00:18:45,241	superstore	Amy
+60	16	you that...	UNK	00:18:47,076	00:18:49,779	superstore	Amy
+61	0	uh, you know, it's fine.	Comfort	00:19:07,163	00:19:09,732	superstore	superstore person2
+61	1	we have a nine right here.	UNK	00:19:09,766	00:19:12,034	superstore	superstore person2
+61	2	what are you doing?	UNK	00:19:16,372	00:19:18,741	superstore	superstore person1
+61	3	i'm sorry.	Apologise	00:19:18,775	00:19:20,009	superstore	superstore person2
+61	4	oh, god. uh...	Leave	00:19:21,310	00:19:24,747	superstore	superstore person2
