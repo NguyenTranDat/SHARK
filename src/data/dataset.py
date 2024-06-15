@@ -6,6 +6,7 @@ from itertools import chain
 from nltk.tokenize import word_tokenize
 from transformers import AutoTokenizer
 import numpy as np
+import pickle
 import os
 import sys
 
@@ -118,15 +119,24 @@ class MIntRec2:
         self.test_data = self.process_data("src/data/MintRec2/test.tsv")
         self.train_data = self.process_data("src/data/MintRec2/train.tsv")
 
-        torch.save(MMDataset(self.dev_data), "src/data/dev_data.pth")
-        torch.save(MMDataset(self.test_data), "src/data/test_data.pth")
-        torch.save(MMDataset(self.train_data), "src/data/train_data.pth")
+        # torch.save(MMDataset(self.dev_data), "src/data/dev_data.pth")
+        # torch.save(MMDataset(self.test_data), "src/data/test_data.pth")
+        # torch.save(MMDataset(self.train_data), "src/data/train_data.pth")
 
         self.tokenizer.save_pretrained("C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/tokenizer")
-        torch.save(
-            self.mapping2id,
-            "C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/mapping2id.pth",
-        )
+        # torch.save(
+        #     self.mapping2id,
+        #     "C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/mapping2id.pth",
+        # )
+
+        with open("src/data/dev_data.pkl", "wb") as f:
+            pickle.dump(MMDataset(self.dev_data), f)
+
+        with open("src/data/test_data.pkl", "wb") as f:
+            pickle.dump(MMDataset(self.test_data), f)
+
+        with open("src/data/train_data.pkl", "wb") as f:
+            pickle.dump(MMDataset(self.train_data), f)
 
     @classmethod
     def read_data(cls, file_path: str):
@@ -151,6 +161,13 @@ class MIntRec2:
         atomic = {"oReact": [], "xReact": []}
         retrieval = {"oReact": [], "xReact": []}
         word = []
+        utt_prefix = {
+            "ids": [],
+            "atomic_xReact": [],
+            "atomic_oReact": [],
+            "retrieval_xReact": [],
+            "retrieval_oReact": [],
+        }
 
         for row in data:
             index = f"dia{row[0]}_utt{row[1]}"
@@ -160,6 +177,13 @@ class MIntRec2:
                 retrieval = {"oReact": [], "xReact": []}
                 word = []
                 speakers = []
+                utt_prefix = {
+                    "ids": [],
+                    "atomic_xReact": [],
+                    "atomic_oReact": [],
+                    "retrieval_xReact": [],
+                    "retrieval_oReact": [],
+                }
 
             speakers.append(row[7])
 

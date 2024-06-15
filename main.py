@@ -1,5 +1,6 @@
 import os
 import torch
+import pickle
 import torch.nn as nn
 from torch.optim import Adam
 from torch.utils.data import DataLoader, TensorDataset
@@ -10,9 +11,14 @@ from src.ECTEC.seq2seq_model import BartSeq2SeqModel
 from src.data.dataset import MMDataset
 
 
-dev_data = torch.load("src/data/dev_data.pth")
-test_data = torch.load("src/data/test_data.pth")
-train_data = torch.load("src/data/train_data.pth")
+with open("src/data/dev_data.pkl", "rb") as f:
+    dev_data = pickle.load(f)
+
+with open("src/data/test_data.pkl", "rb") as f:
+    test_data = pickle.load(f)
+
+with open("src/data/train_data.pkl", "rb") as f:
+    train_data = pickle.load(f)
 
 train_loader = DataLoader(train_data, batch_size=1)
 test_loader = DataLoader(test_data, batch_size=1)
