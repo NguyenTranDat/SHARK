@@ -161,6 +161,7 @@ class MIntRec2:
         atomic = {"oReact": [], "xReact": []}
         retrieval = {"oReact": [], "xReact": []}
         word = []
+        label = []
         utt_prefix = {
             "ids": [],
             "atomic_xReact": [],
@@ -169,7 +170,8 @@ class MIntRec2:
             "retrieval_oReact": [],
         }
 
-        for row in data:
+        for i in range(len(data)):
+            row = data[i]
             index = f"dia{row[0]}_utt{row[1]}"
 
             if row[1] == "0":
@@ -177,6 +179,7 @@ class MIntRec2:
                 retrieval = {"oReact": [], "xReact": []}
                 word = []
                 speakers = []
+                label = []
                 utt_prefix = {
                     "ids": [],
                     "atomic_xReact": [],
@@ -261,33 +264,36 @@ class MIntRec2:
                     else:
                         utt_oReact_mask[ii][jj] = 1
 
-            if row[3] == "UNK":
-                continue
+            # if row[3] == "UNK":
+            #     continue
 
-            result.append(
-                {
-                    "index": index,
-                    "dia_utt_num": int(row[1]),
-                    "token": torch.LongTensor(word_bpes),
-                    "len_token": len(word_bpes),
-                    "word_atomic_oReact": torch.LongTensor(word_atomic_oReact),
-                    "len_word_atomic_oReact": len(word_atomic_oReact),
-                    "word_atomic_xReact": torch.LongTensor(word_atomic_xReact),
-                    "len_word_atomic_xReact": len(word_atomic_xReact),
-                    "word_retrieval_xReact": torch.LongTensor(word_retrieval_xReact),
-                    "len_word_retrieval_xReact": len(word_retrieval_xReact),
-                    "word_retrieval_oReact": torch.LongTensor(word_retrieval_oReact),
-                    "len_word_retrieval_oReact": len(word_retrieval_oReact),
-                    "utt_prefix_ids": torch.LongTensor(utt_prefix_ids),
-                    "atomic_prefix_ids_xReact": torch.LongTensor(atomic_prefix_ids_xReact),
-                    "atomic_prefix_ids_oReact": torch.LongTensor(atomic_prefix_ids_oReact),
-                    "retrieval_prefix_ids_xReact": torch.LongTensor(retrieval_prefix_ids_xReact),
-                    "retrieval_prefix_ids_oReact": torch.LongTensor(retrieval_prefix_ids_oReact),
-                    "utt_xReact_mask": torch.LongTensor(utt_xReact_mask),
-                    "utt_oReact_mask": torch.LongTensor(utt_oReact_mask),
-                    "label": benchmarks["intent_labels"][row[3]],
-                }
-            )
+            label.append(benchmarks["intent_labels"][row[3]])
+
+            if i + 1 == len(data) or data[i + 1][1] == "0":
+                result.append(
+                    {
+                        "index": index,
+                        "dia_utt_num": int(row[1]),
+                        "token": torch.LongTensor(word_bpes),
+                        "len_token": len(word_bpes),
+                        "word_atomic_oReact": torch.LongTensor(word_atomic_oReact),
+                        "len_word_atomic_oReact": len(word_atomic_oReact),
+                        "word_atomic_xReact": torch.LongTensor(word_atomic_xReact),
+                        "len_word_atomic_xReact": len(word_atomic_xReact),
+                        "word_retrieval_xReact": torch.LongTensor(word_retrieval_xReact),
+                        "len_word_retrieval_xReact": len(word_retrieval_xReact),
+                        "word_retrieval_oReact": torch.LongTensor(word_retrieval_oReact),
+                        "len_word_retrieval_oReact": len(word_retrieval_oReact),
+                        "utt_prefix_ids": torch.LongTensor(utt_prefix_ids),
+                        "atomic_prefix_ids_xReact": torch.LongTensor(atomic_prefix_ids_xReact),
+                        "atomic_prefix_ids_oReact": torch.LongTensor(atomic_prefix_ids_oReact),
+                        "retrieval_prefix_ids_xReact": torch.LongTensor(retrieval_prefix_ids_xReact),
+                        "retrieval_prefix_ids_oReact": torch.LongTensor(retrieval_prefix_ids_oReact),
+                        "utt_xReact_mask": torch.LongTensor(utt_xReact_mask),
+                        "utt_oReact_mask": torch.LongTensor(utt_oReact_mask),
+                        "label": torch.LongTensor(label),
+                    }
+                )
 
         return result
 

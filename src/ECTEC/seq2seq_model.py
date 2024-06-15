@@ -183,9 +183,9 @@ class BartSeq2SeqModel(nn.Module):
 
         logits = self.emo_ffn(new_encoder_outputs_utt)
 
-        logits = logits.view(1, -1)[:, :30]
+        # logits = logits.view(1, -1)[:, :30]
 
-        logits = F.softmax(logits, dim=-1)
+        # logits = F.softmax(logits, dim=-1)
 
         # bz, _, _ = new_encoder_outputs_utt.size()
         # new_encoder_outputs = encoder_outputs.clone()

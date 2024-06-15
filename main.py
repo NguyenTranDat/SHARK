@@ -54,7 +54,7 @@ def each_epoch(batch):
     kwargs = batch.copy()
     label = batch["label"]
     kwargs.pop("label")
-    kwargs.pop("index")
+    print(kwargs.pop("index"))
     return kwargs, label
 
 
@@ -72,6 +72,7 @@ def train(num_epochs=20):
         start_epoch = checkpoint["epoch"]
 
     for epoch in range(start_epoch + 1, num_epochs):
+        breakpoint()
         total_loss = 0
         model.train()
         for batch in train_loader:
@@ -79,6 +80,7 @@ def train(num_epochs=20):
             optimizer.zero_grad()
 
             outputs = model(**kwargs)
+            breakpoint()
             loss = criterion(outputs, label)
             loss.backward()
 
