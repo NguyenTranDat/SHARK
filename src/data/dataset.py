@@ -1,6 +1,6 @@
 import csv
 import torch
-from torch.utils.data import Dataset
+import pickle
 import nltk
 from itertools import chain
 from nltk.tokenize import word_tokenize
@@ -9,21 +9,9 @@ import numpy as np
 import pickle
 import os
 import sys
+import re
 
 from data import benchmarks
-
-
-class MMDataset(Dataset):
-    def __init__(self, data):
-        super(MMDataset, self).__init__()
-
-        self.data = data
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, idx: int):
-        return self.data[idx]
 
 
 class MIntRec2:
@@ -100,6 +88,12 @@ class MIntRec2:
         return w_bpes, all_bpes
 
     @classmethod
+    def clean_data(cls, data):
+        pattern = r"[^a-zA-Z0-9]"
+        cleaned_data = re.sub(pattern, " ", data)
+        return cleaned_data
+
+    @classmethod
     def get_prefix_ids(cls, word_bpes, start_prefix_id, last_prefix_id):
         utt_prefix_ids = []
         for ii, w_id in enumerate(word_bpes):
@@ -119,24 +113,21 @@ class MIntRec2:
         self.test_data = self.process_data("src/data/MintRec2/test.tsv")
         self.train_data = self.process_data("src/data/MintRec2/train.tsv")
 
-        # torch.save(MMDataset(self.dev_data), "src/data/dev_data.pth")
-        # torch.save(MMDataset(self.test_data), "src/data/test_data.pth")
-        # torch.save(MMDataset(self.train_data), "src/data/train_data.pth")
-
         self.tokenizer.save_pretrained("C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/tokenizer")
-        # torch.save(
-        #     self.mapping2id,
-        #     "C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/mapping2id.pth",
-        # )
 
         with open("src/data/dev_data.pkl", "wb") as f:
-            pickle.dump(MMDataset(self.dev_data), f)
+            pickle.dump(self.dev_data, f)
 
         with open("src/data/test_data.pkl", "wb") as f:
-            pickle.dump(MMDataset(self.test_data), f)
+            pickle.dump(self.test_data, f)
 
         with open("src/data/train_data.pkl", "wb") as f:
-            pickle.dump(MMDataset(self.train_data), f)
+            pickle.dump(self.train_data, f)
+
+        self.tokenizer.save_pretrained("src/data/tokenizer")
+
+        # with open("src/data/mapping2id.pkl", "wb") as f:
+        #     pickle.dump(self.mapping2id, f)
 
     @classmethod
     def read_data(cls, file_path: str):
@@ -195,12 +186,12 @@ class MIntRec2:
             atomic["oReact"] = (
                 atomic["oReact"]
                 + [f"<<oReact{row[1]}>>"]
-                + MIntRec2.clean_tokens(MIntRec2.split_token(f"Others feel {tmp_atomic[2]}"))
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"Others feel {MIntRec2.clean_data(tmp_atomic[2])}"))
             )
             atomic["xReact"] = (
                 atomic["xReact"]
                 + [f"<<xReact{row[1]}>>"]
-                + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]} feels {tmp_atomic[8]}"))
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]} feels {MIntRec2.clean_data(tmp_atomic[8])}"))
             )
 
             tmp_retrieval = next((entry for entry in self.kg_retrieval if index in entry), None)
@@ -208,15 +199,19 @@ class MIntRec2:
             retrieval["oReact"] = (
                 retrieval["oReact"]
                 + [f"<<oReact{row[1]}>>"]
-                + MIntRec2.clean_tokens(MIntRec2.split_token(f"Others feel {tmp_retrieval[1]}"))
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"Others feel {MIntRec2.clean_data(tmp_retrieval[1])}"))
             )
             retrieval["xReact"] = (
                 retrieval["xReact"]
                 + [f"<<xReact{row[1]}>>"]
-                + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]} feels {tmp_retrieval[2]}"))
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]} feels {MIntRec2.clean_data(tmp_atomic[2])}"))
             )
 
-            word = word + [f"<<U{row[1]}>>"] + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]}: {row[2]}"))
+            word = (
+                word
+                + [f"<<U{row[1]}>>"]
+                + MIntRec2.clean_tokens(MIntRec2.split_token(f"{row[7]}: {MIntRec2.clean_data(row[2])}"))
+            )
 
             _word_bpes, word_bpes = self.tokenize_tokens(word)
             _, word_atomic_xReact = self.tokenize_tokens(atomic["xReact"])

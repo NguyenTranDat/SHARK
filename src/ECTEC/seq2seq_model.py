@@ -54,7 +54,7 @@ class BartSeq2SeqModel(nn.Module):
         self.emo_ffn = BartClassificationHead(
             inner_dim=self.hidden_size,
             input_dim=self.hidden_size,
-            num_classes=30,
+            num_classes=31,
             pooler_dropout=0.3,
         )
 
@@ -184,6 +184,7 @@ class BartSeq2SeqModel(nn.Module):
         logits = self.emo_ffn(new_encoder_outputs_utt)
 
         # logits = logits.view(1, -1)[:, :30]
+        # logits = logits.transpose(1, 2).sum(dim=2)
 
         # logits = F.softmax(logits, dim=-1)
 

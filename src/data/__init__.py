@@ -30,6 +30,7 @@ benchmarks = {
         "Taunt": 27,
         "Thank": 28,
         "Warn": 29,
+        "UNK": 30,
     },
     "speaker_list": [
         "friends person5",

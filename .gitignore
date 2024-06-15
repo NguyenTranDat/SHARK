@@ -51,6 +51,7 @@ coverage.xml
 .pytest_cache/
 *.pth
 *.pkl
+*.tsv
 
 # Translations
 *.mo
