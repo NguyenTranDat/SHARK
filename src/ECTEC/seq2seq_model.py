@@ -8,7 +8,8 @@ from src.lib.State.bart import BartState
 from src.lib.GAT import GAT, GraphAttentionLayer
 from src.lib.BART.classification_head import BartClassificationHead
 from src.lib.BART.encoder import FBartEncoder
-from src.lib.BART.ulti import get_utt_representation
+from src.lib.BART.decoder import CaGFBartDecoder
+from src.lib.ulti import get_utt_representation, seq_len_to_mask
 
 
 class BartSeq2SeqModel(nn.Module):
@@ -44,6 +45,7 @@ class BartSeq2SeqModel(nn.Module):
                 embed /= len(indexes)
                 model.decoder.embed_tokens.weight.data[index] = embed
         self.encoder = FBartEncoder(encoder)
+        # self.decoder = CaGFBartDecoder(decoder, pad_token_id=tokenizer.pad_token_id, label_ids=label_ids)
         self.linear_layer = nn.Sequential(nn.Linear(self.hidden_size * 3, 2), nn.Sigmoid())
         self.graph_att_layer = GraphAttentionLayer(
             in_features=self.hidden_size,
@@ -51,10 +53,11 @@ class BartSeq2SeqModel(nn.Module):
             dropout=0.2,
             alpha=0.2,
         )
+        # self.graph_att_layer = GAT(nfeat=self.hidden_size, nhid=self.hidden_size, dropout=0.2, alpha=0.2, nheads=2)
         self.emo_ffn = BartClassificationHead(
             inner_dim=self.hidden_size,
             input_dim=self.hidden_size,
-            num_classes=31,
+            num_classes=30,
             pooler_dropout=0.3,
         )
 
@@ -79,7 +82,6 @@ class BartSeq2SeqModel(nn.Module):
         dia_utt_num,
         len_token,
     ):
-
         encoder_outputs, encoder_mask, hidden_states = self.encoder(token, len_token)
         src_embed_outputs = hidden_states[0]
 
@@ -170,11 +172,7 @@ class BartSeq2SeqModel(nn.Module):
             utt_oReact_mask,
         )
 
-        batch_size = dia_utt_num.shape[0]
-
-        broad_cast_seq_len = torch.arange(encoder_outputs_utt.size(1)).expand(batch_size, -1).to(dia_utt_num)
-
-        utt_mask = broad_cast_seq_len < dia_utt_num.unsqueeze(1)
+        utt_mask = seq_len_to_mask(dia_utt_num, max_len=encoder_outputs_utt.size(1))  # bsz x max_utt_len
 
         new_encoder_outputs_utt = new_encoder_outputs_utt.masked_fill(
             utt_mask.eq(0).unsqueeze(2).repeat(1, 1, encoder_outputs_utt.size(-1)),
@@ -182,25 +180,5 @@ class BartSeq2SeqModel(nn.Module):
         )
 
         logits = self.emo_ffn(new_encoder_outputs_utt)
-
-        # logits = logits.view(1, -1)[:, :30]
-        # logits = logits.transpose(1, 2).sum(dim=2)
-
-        # logits = F.softmax(logits, dim=-1)
-
-        # bz, _, _ = new_encoder_outputs_utt.size()
-        # new_encoder_outputs = encoder_outputs.clone()
-
-        # for ii in range(bz):
-        #     for jj in range(dia_utt_num[ii]):
-        #         new_encoder_outputs[ii, utt_prefix_ids[ii][jj]] = (
-        #             encoder_outputs[ii, utt_prefix_ids[ii][jj]]
-        #             + new_encoder_outputs_utt[ii, jj]
-        #         )  # Add the origin prefix representation to the knowledge-enhanced utterance representation
-
-        # state = BartState(
-        #     new_encoder_outputs, encoder_mask, src_tokens, first, src_embed_outputs
-        # )
-        # return state, logits
 
         return logits

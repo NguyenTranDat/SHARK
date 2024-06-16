@@ -1,22 +1,25 @@
 import os
 import torch
+import torch.nn.functional as F
 import pickle
 import numpy as np
 import torch.nn as nn
 import pickle
-from torch.optim import Adam
 from torch.utils.data import DataLoader, TensorDataset
 from transformers import BartTokenizer, BartForConditionalGeneration
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, recall_score, precision_score
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 from src.ECTEC.seq2seq_model import BartSeq2SeqModel
 from src.data.mm_dataset import MMDataset
+from src.lib.ulti import seq_len_to_mask
 
-with open("src/data/dev_data.pkl", "rb") as f:
+with open("src/data/train_data.pkl", "rb") as f:
     dev_data = pickle.load(f)
     dev_data = MMDataset(dev_data)
 
-with open("src/data/test_data.pkl", "rb") as f:
+with open("src/data/train_data.pkl", "rb") as f:
     test_data = pickle.load(f)
     test_data = MMDataset(test_data)
 
@@ -24,7 +27,11 @@ with open("src/data/train_data.pkl", "rb") as f:
     train_data = pickle.load(f)
     train_data = MMDataset(train_data)
 
-train_loader = DataLoader(train_data, batch_size=1)
+
+with open("src/data/mapping2id.pkl", "rb") as f:
+    mapping2id = pickle.load(f)
+
+train_loader = DataLoader(train_data, batch_size=1, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=1)
 dev_loader = DataLoader(dev_data, batch_size=1)
 
@@ -63,8 +70,72 @@ def each_epoch(batch):
     return kwargs, label
 
 
+def plot_confusion_matrix(all_targets, all_predictions, file_path: str = "confusion_matrix.png"):
+    cm = confusion_matrix(all_targets, all_predictions)
+    class_names = [
+        "Acknowledge",
+        "Advise",
+        "Agree",
+        "Apologise",
+        "Arrange",
+        "Ask for help",
+        "Asking for opinions",
+        "Care",
+        "Comfort",
+        "Complain",
+        "Confirm",
+        "Criticize",
+        "Doubt",
+        "Emphasize",
+        "Explain",
+        "Flaunt",
+        "Greet",
+        "Inform",
+        "Introduce",
+        "Invite",
+        "Joke",
+        "Leave",
+        "Oppose",
+        "Plan",
+        "Praise",
+        "Prevent",
+        "Refuse",
+        "Taunt",
+        "Thank",
+        "Warn",
+    ]
+    fig, ax = plt.subplots(figsize=(12, 10))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
+    plt.ylabel("Actual")
+    plt.xlabel("Predicted")
+    plt.title("Confusion Matrix")
+    plt.savefig(file_path)
+    plt.close()
+
+
 def train(num_epochs=20):
-    optimizer = Adam(model.parameters(), lr=1e-4)
+    parameters = []
+    params = {"lr": 5e-5, "weight_decay": 1e-2}
+    params["params"] = [
+        param for name, param in model.named_parameters() if not ("bart_encoder" in name or "bart_decoder" in name)
+    ]
+    parameters.append(params)
+
+    params = {"lr": 5e-5, "weight_decay": 1e-2}
+    params["params"] = []
+    for name, param in model.named_parameters():
+        if ("bart_encoder" in name or "bart_decoder" in name) and not ("layernorm" in name or "layer_norm" in name):
+            params["params"].append(param)
+    parameters.append(params)
+
+    params = {"lr": 5e-5, "weight_decay": 0}
+    params["params"] = []
+    for name, param in model.named_parameters():
+        if ("bart_encoder" in name or "bart_decoder" in name) and ("layernorm" in name or "layer_norm" in name):
+            params["params"].append(param)
+    parameters.append(params)
+
+    optimizer = torch.optim.AdamW(parameters)
     criterion = nn.CrossEntropyLoss()
 
     start_epoch = 0
@@ -76,7 +147,7 @@ def train(num_epochs=20):
         criterion.load_state_dict(checkpoint["criterion_state_dict"])
         start_epoch = checkpoint["epoch"] + 1
 
-    for epoch in range(start_epoch + 1, num_epochs):
+    for epoch in range(start_epoch, num_epochs):
         # breakpoint()
         total_loss = 0
         model.train()
@@ -85,7 +156,6 @@ def train(num_epochs=20):
             optimizer.zero_grad()
 
             outputs = model(**kwargs)
-            # breakpoint()
             loss = criterion(outputs.transpose(1, 2), label)
             loss.backward()
 
@@ -103,7 +173,7 @@ def train(num_epochs=20):
         all_predictions = []
         all_targets = []
 
-        for batch in dev_loader:
+        for batch in test_loader:
             kwargs, label = each_epoch(batch)
             outputs = model(**kwargs)
 
@@ -114,11 +184,15 @@ def train(num_epochs=20):
         all_predictions = np.concatenate(all_predictions)
         all_targets = np.concatenate(all_targets)
         acc = accuracy_score(all_targets, all_predictions)
-        f1 = f1_score(all_targets, all_predictions, average="macro")
-        recall = recall_score(all_targets, all_predictions, average="macro")
-        precision = precision_score(all_targets, all_predictions, average="macro")
+        f1 = f1_score(all_targets, all_predictions, average="weighted")
+        recall = recall_score(all_targets, all_predictions, average="weighted")
+        precision = precision_score(all_targets, all_predictions, average="weighted")
 
         print(f"Validation Accuracy: {acc:.4f}, F1 Score: {f1:.4f}, Recall: {recall:.4f}, Precision: {precision:.4f}")
+
+        plot_confusion_matrix(
+            all_targets, all_predictions, file_path=f"confusion_matrix/confusion_matrix_epoch_{epoch+1}.png"
+        )
 
 
 def test():
@@ -139,9 +213,9 @@ def test():
     all_targets = np.concatenate(all_targets)
 
     acc = accuracy_score(all_targets, all_predictions)
-    f1 = f1_score(all_targets, all_predictions, average="macro")
-    recall = recall_score(all_targets, all_predictions, average="macro")
-    precision = precision_score(all_targets, all_predictions, average="macro")
+    f1 = f1_score(all_targets, all_predictions, average="weighted")
+    recall = recall_score(all_targets, all_predictions, average="weighted")
+    precision = precision_score(all_targets, all_predictions, average="weighted")
 
     print(f"Test Accuracy: {acc:.4f}, F1 Score: {f1:.4f}, Recall: {recall:.4f}, Precision: {precision:.4f}")
 

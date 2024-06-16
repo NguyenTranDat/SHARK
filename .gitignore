@@ -52,6 +52,7 @@ coverage.xml
 *.pth
 *.pkl
 *.tsv
+*.png
 
 # Translations
 *.mo

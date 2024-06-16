@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from transformers.models.bart.modeling_bart import BartDecoder
 
 from src.lib.Seq2Seq.decoder import Seq2SeqDecoder
 
@@ -8,7 +9,7 @@ from src.lib.Seq2Seq.decoder import Seq2SeqDecoder
 class CaGFBartDecoder(Seq2SeqDecoder):
     # Copy and generate
     def __init__(self, decoder, pad_token_id, label_ids):
-        super().__init__(decoder, pad_token_id, label_ids)
+        super().__init__()
         assert isinstance(decoder, BartDecoder)
         self.decoder = decoder
         causal_mask = torch.zeros(512, 512).fill_(float("-inf"))
@@ -27,6 +28,7 @@ class CaGFBartDecoder(Seq2SeqDecoder):
             nn.ReLU(),
             nn.Linear(hidden_size, hidden_size),
         )
+        self.dropout_layer = nn.Dropout(0.3)
 
     def forward(self, tokens, utt_prefix_ids, dia_utt_num, state):
         if tokens.size(0) != utt_prefix_ids.size(0):
