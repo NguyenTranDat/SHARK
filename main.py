@@ -12,11 +12,6 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from src.ECTEC.seq2seq_model import BartSeq2SeqModel
 from src.data.mm_dataset import MMDataset
 
-
-# dev_data = torch.load("src/data/dev_data.pt")
-# test_data = torch.load("src/data/test_data.pt")
-# train_data = torch.load("src/data/train_data.pt")
-
 with open("src/data/dev_data.pkl", "rb") as f:
     dev_data = pickle.load(f)
     dev_data = MMDataset(dev_data)
@@ -28,9 +23,6 @@ with open("src/data/test_data.pkl", "rb") as f:
 with open("src/data/train_data.pkl", "rb") as f:
     train_data = pickle.load(f)
     train_data = MMDataset(train_data)
-
-with open("C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/mapping2id.pkl", "rb") as f:
-    mapping2id = pickle.load(f)
 
 train_loader = DataLoader(train_data, batch_size=1)
 test_loader = DataLoader(test_data, batch_size=1)
@@ -66,7 +58,8 @@ def each_epoch(batch):
     kwargs = batch.copy()
     label = batch["label"]
     kwargs.pop("label")
-    print(kwargs.pop("index"))
+    # print(kwargs.pop("index"))
+    kwargs.pop("index")
     return kwargs, label
 
 

@@ -110,19 +110,19 @@ class MIntRec2:
             self.atomic_data = [row for row in reader]
 
         self.dev_data = self.process_data("src/data/MintRec2/dev.tsv")
-        self.test_data = self.process_data("src/data/MintRec2/test.tsv")
-        self.train_data = self.process_data("src/data/MintRec2/train.tsv")
+        # self.test_data = self.process_data("src/data/MintRec2/test.tsv")
+        # self.train_data = self.process_data("src/data/MintRec2/train.tsv")
 
-        self.tokenizer.save_pretrained("C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/tokenizer")
+        # self.tokenizer.save_pretrained("C:/Users/datng/Documents/LAB/KLTN/MintRec_code/shark/src/data/tokenizer")
 
         with open("src/data/dev_data.pkl", "wb") as f:
             pickle.dump(self.dev_data, f)
 
-        with open("src/data/test_data.pkl", "wb") as f:
-            pickle.dump(self.test_data, f)
+        # with open("src/data/test_data.pkl", "wb") as f:
+        #     pickle.dump(self.test_data, f)
 
-        with open("src/data/train_data.pkl", "wb") as f:
-            pickle.dump(self.train_data, f)
+        # with open("src/data/train_data.pkl", "wb") as f:
+        #     pickle.dump(self.train_data, f)
 
         self.tokenizer.save_pretrained("src/data/tokenizer")
 
