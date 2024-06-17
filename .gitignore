@@ -54,6 +54,8 @@ coverage.xml
 *.tsv
 *.png
 
+log/
+
 # Translations
 *.mo
 *.pot

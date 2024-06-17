@@ -21,7 +21,7 @@ class BartSeq2SeqModel(nn.Module):
         super(BartSeq2SeqModel, self).__init__()
         self.hidden_size = 768
 
-        tokenizer = AutoTokenizer.from_pretrained("src/data/tokenizer")
+        tokenizer = AutoTokenizer.from_pretrained("src/example/tokenizer")
 
         model = BartModel.from_pretrained("facebook/bart-base")
         num_tokens, _ = model.encoder.embed_tokens.weight.shape
@@ -45,8 +45,7 @@ class BartSeq2SeqModel(nn.Module):
                 embed /= len(indexes)
                 model.decoder.embed_tokens.weight.data[index] = embed
         self.encoder = FBartEncoder(encoder)
-        # self.decoder = CaGFBartDecoder(decoder, pad_token_id=tokenizer.pad_token_id, label_ids=label_ids)
-        self.linear_layer = nn.Sequential(nn.Linear(self.hidden_size * 3, 2), nn.Sigmoid())
+        self.linear_layer = nn.Sequential(nn.Linear(self.hidden_size * 3, 2), nn.ReLU())
         self.graph_att_layer = GraphAttentionLayer(
             in_features=self.hidden_size,
             out_features=self.hidden_size,

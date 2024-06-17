@@ -21,7 +21,7 @@ def get_utt_representation(all_word_state, utt_prefix_ids, dia_utt_num):
         index=utt_prefix_ids.unsqueeze(2).repeat(1, 1, all_word_state.size(-1)), dim=1
     )  # bsz x max_utt_len x hidden_size
     # batch_size = dia_utt_num.shape[0]
-    utt_mask = seq_len_to_mask(dia_utt_num, max_len=output.shape[1]).eq(0)  # bsz x max_utt_len
+    utt_mask = seq_len_to_mask(dia_utt_num, max_len=output.size(1)).eq(0)  # bsz x max_utt_len
     utt_mask_ = utt_mask.unsqueeze(2).repeat(1, 1, output.size(-1))
     output = output.masked_fill(utt_mask_, 0)
 
