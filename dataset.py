@@ -24,10 +24,8 @@ class MIntRec2:
 
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer)
 
-        self.mapping = MAPPING
-
         self.max_utt_num = 100
-        add_tokens = list(self.mapping.values())
+        add_tokens = list(MAPPING.values())
         add_tokens += [f"<<U{i}>>" for i in range(self.max_utt_num)]
         add_tokens += [f"<<react>>", "<</react>>"]
         add_tokens += [f"<<xReact{i}>>" for i in range(self.max_utt_num)]
@@ -35,14 +33,14 @@ class MIntRec2:
 
         self.tokenizer.add_tokens(add_tokens)
 
+        self.target_shift = len(MAPPING) + 1
         self.mapping2id = {}
         self.mapping2targetid = {}
 
-        for key, value in self.mapping.items():
+        for key, value in MAPPING.items():
             key_id = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(value))
-            assert len(key_id) == 1, value
-            assert key_id[0] >= self.tokenizer.vocab_size
             self.mapping2id[key] = key_id[0]
+            self.mapping2targetid[key] = len(self.mapping2targetid)
 
         self.train_data: list = []
         self.dev_data: list = []
@@ -51,9 +49,7 @@ class MIntRec2:
         self.atomic_data: list = []
         self.kg_retrieval: list = []
 
-    def tokenize_tokens(self, raw_words):
-        words = tokenize_raw_words(raw_words)
-
+    def tokenize_tokens(self, words):
         w_bpes = [[self.tokenizer.bos_token_id]]
         for word in words:
             bpes = self.tokenizer.tokenize(word)
@@ -92,62 +88,70 @@ class MIntRec2:
     def process_data(self, file_path):
         data = read_data(file_path)
         result = []
-        speakers, atomic, retrieval, word, label = (
-            [],
-            {"oReact": [], "xReact": []},
-            {"oReact": [], "xReact": []},
-            [],
-            [],
-        )
-        utt_prefix, count = {
-            "ids": [],
-            "atomic_xReact": [],
-            "atomic_oReact": [],
-            "retrieval_xReact": [],
-            "retrieval_oReact": [],
-        }, 0
+        speakers, label, target_spans, words = [], [], [], []
+        atomic, retrieval = {"oReact": [], "xReact": []}, {"oReact": [], "xReact": []}
+        count = 0
+        o_start_bpe, a_start_bpe = 0, 0
 
         for i, row in enumerate(data):
             index = f"dia{row[0]}_utt{row[1]}"
-            count += 1
 
             if row[1] == "0":
                 if count > 1:
-                    result.append(self._process_batch_data(index, word, atomic, retrieval, speakers, label, count))
-                atomic, retrieval, word, speakers, label = (
-                    {"oReact": "", "xReact": ""},
-                    {"oReact": "", "xReact": ""},
-                    "",
-                    [],
-                    [],
-                )
+                    result.append(
+                        self._process_batch_data(index, words, atomic, retrieval, speakers, label, count, target_spans)
+                    )
+                speakers, label, target_spans, words = [], [], [], []
+                atomic, retrieval = {"oReact": [], "xReact": []}, {"oReact": [], "xReact": []}
                 count = 0
 
             if row[3] != "UNK":
+                count += 1
                 label.append(benchmarks["intent_labels"][row[3]])
                 speakers.append(row[7])
 
                 tmp_atomic = next((entry for entry in self.atomic_data if index in entry), None)
-                atomic["oReact"] += f"<<oReact{count}>> Others feel {clean_data(tmp_atomic[2])}"
-                atomic["xReact"] += f"<<xReact{count}>> {row[7]} feels {clean_data(tmp_atomic[8])}"
+                atomic["oReact"] += tokenize_raw_words(f"<<oReact{count}>> Others feel {clean_data(tmp_atomic[2])}")
+                atomic["xReact"] += tokenize_raw_words(f"<<xReact{count}>> {row[7]} feels {clean_data(tmp_atomic[8])}")
 
                 tmp_retrieval = next((entry for entry in self.kg_retrieval if index in entry), None)
-                retrieval["oReact"] += f"<<oReact{count}>> Others feel {clean_data(tmp_retrieval[1])}"
-                retrieval["xReact"] += f"<<xReact{count}>> {row[7]} feels {clean_data(tmp_retrieval[2])}"
+                retrieval["oReact"] += tokenize_raw_words(
+                    f"<<oReact{count}>> Others feel {clean_data(tmp_retrieval[1])}"
+                )
+                retrieval["xReact"] += tokenize_raw_words(
+                    f"<<xReact{count}>> {row[7]} feels {clean_data(tmp_retrieval[2])}"
+                )
 
-                word += f"<<U{count}>> {row[7]}: {clean_data(row[2])}"
+                if row[1] == "0":
+                    o_start_bpe = 0
+                    a_start_bpe = 0
+                else:
+                    o_start_bpe = a_start_bpe
+                    a_start_bpe = len(words) + 1
 
-        if word:
-            result.append(self._process_batch_data(index, word, atomic, retrieval, speakers, label, count))
+                words += tokenize_raw_words(f"<<U{count}>> {row[7]}: {clean_data(row[2])}")
+
+                target_spans.append([a_start_bpe + self.target_shift, o_start_bpe + self.target_shift])
+                target_spans[-1].append(self.mapping2targetid[row[3]] + 2)
+                target_spans[-1] = tuple(target_spans[-1])
+
+        if words:
+            result.append(
+                self._process_batch_data(index, words, atomic, retrieval, speakers, label, count, target_spans)
+            )
 
         return result
 
-    def _process_batch_data(self, index, word, atomic, retrieval, speakers, label, count):
+    def _process_batch_data(self, index, word, atomic, retrieval, speakers, label, count, target_spans):
         _, word_bpes = self.tokenize_tokens(word)
         _, word_atomic_xReact = self.tokenize_tokens(atomic["xReact"])
         _, word_atomic_oReact = self.tokenize_tokens(atomic["oReact"])
         _, word_retrieval_xReact = self.tokenize_tokens(retrieval["xReact"])
         _, word_retrieval_oReact = self.tokenize_tokens(retrieval["oReact"])
+
+        target = [0]
+        target.extend(list(chain(*target_spans)))
+        target.append(1)
 
         utt_prefix_ids = get_prefix_ids(
             word_bpes,
@@ -206,7 +210,10 @@ class MIntRec2:
             "retrieval_prefix_ids_oReact": torch.LongTensor(retrieval_prefix_ids_oReact),
             "utt_xReact_mask": torch.LongTensor(utt_xReact_mask),
             "utt_oReact_mask": torch.LongTensor(utt_oReact_mask),
+            # "target": torch.LongTensor(target),
+            # "len_target": len(target),
             "label": torch.LongTensor(label),
+            # "len_label": len(label),
         }
 
 

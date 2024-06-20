@@ -3,7 +3,7 @@ from src.lib.State import State
 
 
 class BartState(State):
-    def __init__(self, encoder_output, encoder_mask, src_tokens, first, src_embed_outputs):
+    def __init__(self, encoder_output, encoder_mask, src_tokens, src_embed_outputs, first=None):
         super().__init__(encoder_output, encoder_mask)
         self.past_key_values = None
         self.src_tokens = src_tokens

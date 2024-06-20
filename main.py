@@ -4,32 +4,23 @@ import torch.nn.functional as F
 import pickle
 import numpy as np
 import torch.nn as nn
-import pickle
-from torch.utils.data import DataLoader, TensorDataset
-from transformers import BartTokenizer, BartForConditionalGeneration
-from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, recall_score, precision_score
-import matplotlib.pyplot as plt
-import seaborn as sns
+from torch.utils.data import DataLoader
 
 from src.ECTEC.seq2seq_model import BartSeq2SeqModel
 from src.example.mm_dataset import MMDataset
 from src.lib.ulti import seq_len_to_mask
+from src.ulti import plot_confusion_matrix, save_checkpoint, load_checkpoint, eval_score, get_data, get_loss
 
-with open("src/example/log/train_data.pkl", "rb") as f:
-    dev_data = pickle.load(f)
-    dev_data = MMDataset(dev_data)
+BATCH_SIZE = 1
+train_data, dev_data, test_data, mapping2id = get_data()
 
-with open("src/example/log/train_data.pkl", "rb") as f:
-    test_data = pickle.load(f)
-    test_data = MMDataset(test_data)
+train_data = MMDataset(train_data)
+dev_data = MMDataset(dev_data)
+test_data = MMDataset(test_data)
 
-with open("src/example/log/train_data.pkl", "rb") as f:
-    train_data = pickle.load(f)
-    train_data = MMDataset(train_data)
-
-
-with open("src/example/log/mapping2id.pkl", "rb") as f:
-    mapping2id = pickle.load(f)
+print(len(train_data))
+print(len(dev_data))
+print(len(test_data))
 
 train_loader = DataLoader(train_data, batch_size=1, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=1)
@@ -37,82 +28,13 @@ dev_loader = DataLoader(dev_data, batch_size=1)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-model = BartSeq2SeqModel()
-
-
-def save_checkpoint(model, optimizer, criterion, epoch, path):
-    torch.save(
-        {
-            "epoch": epoch,
-            "model_state_dict": model.state_dict(),
-            "optimizer_state_dict": optimizer.state_dict(),
-            "criterion_state_dict": criterion.state_dict(),
-        },
-        path,
-    )
-
-    print("save done!!!!!!")
-
-
-def load_checkpoint(model, optimizer, criterion, path):
-    checkpoint = torch.load(path)
-    model.load_state_dict(checkpoint["model_state_dict"])
-    optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
-    criterion.load_state_dict(checkpoint["criterion_state_dict"])
-    epoch = checkpoint["epoch"]
-    return epoch
+model = BartSeq2SeqModel(label_ids=list(mapping2id.values()))
 
 
 def each_epoch(batch):
     kwargs = batch.copy()
-    label = batch["label"]
-    kwargs.pop("label")
-    # print(kwargs.pop("index"))
     kwargs.pop("index")
-    return kwargs, label
-
-
-def plot_confusion_matrix(all_targets, all_predictions, file_path: str = "confusion_matrix.png"):
-    cm = confusion_matrix(all_targets, all_predictions)
-    class_names = [
-        "Acknowledge",
-        "Advise",
-        "Agree",
-        "Apologise",
-        "Arrange",
-        "Ask for help",
-        "Asking for opinions",
-        "Care",
-        "Comfort",
-        "Complain",
-        "Confirm",
-        "Criticize",
-        "Doubt",
-        "Emphasize",
-        "Explain",
-        "Flaunt",
-        "Greet",
-        "Inform",
-        "Introduce",
-        "Invite",
-        "Joke",
-        "Leave",
-        "Oppose",
-        "Plan",
-        "Praise",
-        "Prevent",
-        "Refuse",
-        "Taunt",
-        "Thank",
-        "Warn",
-    ]
-    fig, ax = plt.subplots(figsize=(12, 10))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
-    plt.ylabel("Actual")
-    plt.xlabel("Predicted")
-    plt.title("Confusion Matrix")
-    plt.savefig(file_path)
-    plt.close()
+    return kwargs, kwargs.pop("label")
 
 
 def train(num_epochs=100):
@@ -138,7 +60,6 @@ def train(num_epochs=100):
     parameters.append(params)
 
     optimizer = torch.optim.AdamW(parameters)
-    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.1, patience=2)
     criterion = nn.CrossEntropyLoss()
 
     start_epoch = 0
@@ -151,7 +72,6 @@ def train(num_epochs=100):
         start_epoch = checkpoint["epoch"] + 1
 
     for epoch in range(start_epoch, num_epochs):
-        # breakpoint()
         total_loss = 0
         model.train()
         for batch in train_loader:
@@ -159,6 +79,7 @@ def train(num_epochs=100):
             optimizer.zero_grad()
 
             outputs = model(**kwargs)
+
             loss = criterion(outputs.transpose(1, 2), label)
             loss.backward()
 
@@ -171,6 +92,10 @@ def train(num_epochs=100):
         avg_loss = total_loss / len(train_loader)
         print(f"Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}")
 
+        print("State dict of the model:")
+        for param_tensor in model.state_dict():
+            print(param_tensor, "\t", model.state_dict()[param_tensor].size())
+
         model.eval()
 
         # total_loss = 0
@@ -181,22 +106,13 @@ def train(num_epochs=100):
             kwargs, label = each_epoch(batch)
             outputs = model(**kwargs)
 
-            loss = criterion(outputs.transpose(1, 2), label)
-            # total_loss += loss.item()
-
             predictions = torch.argmax(outputs, dim=-1)
             all_predictions.extend(predictions.cpu().numpy())
             all_targets.extend(label.cpu().numpy())
 
         all_predictions = np.concatenate(all_predictions)
         all_targets = np.concatenate(all_targets)
-        acc = accuracy_score(all_targets, all_predictions)
-        f1 = f1_score(all_targets, all_predictions, average="weighted")
-        recall = recall_score(all_targets, all_predictions, average="weighted")
-        precision = precision_score(all_targets, all_predictions, average="weighted")
-
-        # avg_loss = total_loss / len(test_loader)
-        # scheduler.step(avg_loss)
+        acc, f1, recall, precision = eval_score(all_targets, all_predictions)
 
         print(f"Validation Accuracy: {acc:.4f}, F1 Score: {f1:.4f}, Recall: {recall:.4f}, Precision: {precision:.4f}")
 
@@ -222,10 +138,7 @@ def test():
     all_predictions = np.concatenate(all_predictions)
     all_targets = np.concatenate(all_targets)
 
-    acc = accuracy_score(all_targets, all_predictions)
-    f1 = f1_score(all_targets, all_predictions, average="weighted")
-    recall = recall_score(all_targets, all_predictions, average="weighted")
-    precision = precision_score(all_targets, all_predictions, average="weighted")
+    acc, f1, recall, precision = eval_score(all_targets, all_predictions)
 
     print(f"Test Accuracy: {acc:.4f}, F1 Score: {f1:.4f}, Recall: {recall:.4f}, Precision: {precision:.4f}")
 

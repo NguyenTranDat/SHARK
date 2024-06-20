@@ -13,7 +13,7 @@ from src.lib.ulti import get_utt_representation, seq_len_to_mask
 
 
 class BartSeq2SeqModel(nn.Module):
-    def __init__(self):
+    def __init__(self, label_ids):
         """
         Define the encoder and decoder
         Initialize the custom tokens
@@ -21,7 +21,7 @@ class BartSeq2SeqModel(nn.Module):
         super(BartSeq2SeqModel, self).__init__()
         self.hidden_size = 768
 
-        tokenizer = AutoTokenizer.from_pretrained("src/example/tokenizer")
+        tokenizer = AutoTokenizer.from_pretrained("src/example/log/tokenizer")
 
         model = BartModel.from_pretrained("facebook/bart-base")
         num_tokens, _ = model.encoder.embed_tokens.weight.shape
@@ -45,6 +45,7 @@ class BartSeq2SeqModel(nn.Module):
                 embed /= len(indexes)
                 model.decoder.embed_tokens.weight.data[index] = embed
         self.encoder = FBartEncoder(encoder)
+        # self.decoder = CaGFBartDecoder(decoder, pad_token_id=tokenizer.pad_token_id, label_ids=label_ids)
         self.linear_layer = nn.Sequential(nn.Linear(self.hidden_size * 3, 2), nn.ReLU())
         self.graph_att_layer = GraphAttentionLayer(
             in_features=self.hidden_size,

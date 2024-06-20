@@ -51,7 +51,6 @@ coverage.xml
 .pytest_cache/
 *.pth
 *.pkl
-*.tsv
 *.png
 
 log/
