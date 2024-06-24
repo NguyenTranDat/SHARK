@@ -80,7 +80,7 @@ def eval_score(all_targets, all_predictions):
     recall = recall_score(all_targets, all_predictions, average="weighted")
     precision = precision_score(all_targets, all_predictions, average="weighted")
 
-    return acc, f1, recall, precision
+    return acc * 100, f1 * 100, recall * 100, precision * 100
 
 
 def get_data():
@@ -93,10 +93,10 @@ def get_data():
     with open("src/example/log/train_data.pkl", "rb") as f:
         train_data = pickle.load(f)
 
-    with open("src/example/log/mapping2id.pkl", "rb") as f:
-        mapping2id = pickle.load(f)
+    # with open("src/example/log/mapping2id.pkl", "rb") as f:
+    #     mapping2id = pickle.load(f)
 
-    return train_data, dev_data, test_data, mapping2id
+    return train_data, dev_data, test_data
 
 
 def get_loss(tgt_tokens, tgt_seq_len, tgt_emotions, tgt_emo_seq_len, pred):

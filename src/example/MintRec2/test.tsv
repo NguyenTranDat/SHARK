@@ -1910,56 +1910,6 @@ Dialogue_id	Utterance_id	Text	Label	Start_timestamp	End_timestamp	Source	speaker
 925	20	me too. of course, it speaks to me culturally.	Agree	00:03:43,598	00:03:45,933	bigbang	Howard
 925	21	understandable, but there's a universality to that story which transcends ethnicity.	UNK	00:03:46,100	00:03:50,479	bigbang	Sheldon
 925	22	let's not forget it's got some really catchy tunes.	UNK	00:03:50,647	00:03:53,065	bigbang	Howard
-927	0	i need guinea pigs.	Ask for help	00:06:52,662	00:06:53,703	bigbang	Penny
-927	1	okay, there's a lab animal supply company in reseda you could try.	Advise	00:06:53,871	00:06:58,333	bigbang	Sheldon
-927	2	but if your research is going to have human applications, i suggest white mice.	Advise	00:06:58,501	00:07:02,295	bigbang	Sheldon
-927	3	their brain chemistry is far closer to ours.	Explain	00:07:02,463	00:07:05,507	bigbang	Sheldon
-927	4	with certain obvious exceptions.	Oppose	00:07:26,362	00:07:27,988	bigbang	Sheldon
-927	5	suicide, for example.	UNK	00:07:29,532	00:07:31,867	bigbang	Sheldon
-927	6	so, leonard, how about it?	Asking for opinions	00:07:33,369	00:07:35,495	bigbang	Penny
-927	7	um.... raj is going through some stuff right now and he'd like to take up drinking.	Explain	00:07:47,467	00:07:53,555	bigbang	Leonard
-927	8	okay, here you go, leonard. one tequila sunrise.	UNK	00:07:55,600	00:07:58,518	bigbang	Penny
-927	9	this drink is an example of how liquids with different specific gravities interact in a cylindrical container.	Introduce	00:07:59,937	00:08:06,234	bigbang	Leonard
-927	10	thank you.	Thank	00:08:08,196	00:08:09,779	bigbang	Leonard
-927	11	okay, raj, what'll it be?	Asking for opinions	00:08:10,490	00:08:11,740	bigbang	Penny
-927	12	whatever you recommend.	UNK	00:08:14,702	00:08:15,869	bigbang	Leonard
-927	13	how about a grasshopper? i make a mean grasshopper.	Advise	00:08:16,412	00:08:19,372	bigbang	Penny
-927	14	okay, can you please order a cocktail? i need to practice mixing drinks.	Ask for help	00:08:25,713	00:08:29,257	bigbang	Penny
-927	15	fine. i'll have a virgin cuba libre.	UNK	00:08:29,425	00:08:32,928	bigbang	Sheldon
-927	16	that's rum and coke without the rum.	Introduce	00:08:34,597	00:08:37,098	bigbang	Penny
-927	17	yes.	Agree	00:08:37,266	00:08:38,767	bigbang	Sheldon
-927	18	so coke.	UNK	00:08:40,019	00:08:41,102	bigbang	Penny
-927	19	yes.	Agree	00:08:41,270	00:08:42,729	bigbang	Sheldon
-927	20	bartenders are supposed to have people skills.	Taunt	00:09:00,831	00:09:03,083	bigbang	Sheldon
-927	21	okay. raj, here you go.	UNK	00:09:04,835	00:09:07,963	bigbang	Penny
-927	22	i'd like to try a slippery nipple.	UNK	00:09:09,632	00:09:12,384	bigbang	Howard
-927	23	okay, you're cut off.	UNK	00:09:17,014	00:09:19,182	bigbang	Penny
-927	24	are you talking to me?	Doubt	00:09:35,866	00:09:37,200	bigbang	Penny
-927	25	is there another penny here?	Doubt	00:09:37,660	00:09:39,995	bigbang	Rajesh
-927	26	i was going to be the indira gandhi of particle astrophysics.	Plan	00:09:43,833	00:09:47,210	bigbang	Rajesh
-927	27	it's amazing.	Praise	00:09:51,340	00:09:52,549	bigbang	Leonard
-927	28	how can i be a gynecologist? i can barely look a woman in the eye.	Complain	00:09:57,388	00:10:01,349	bigbang	Rajesh
-927	29	you know what? i'm not going to let my parents control my future.	Inform	00:10:04,854	00:10:08,189	bigbang	Rajesh
-927	30	it's time for a showdown.	Plan	00:10:08,357	00:10:09,816	bigbang	Rajesh
-927	31	somebody give me a computer with a webcam.	Ask for help	00:10:09,984	00:10:12,110	bigbang	Rajesh
-927	32	okay, calm down.	Comfort	00:10:21,704	00:10:23,622	bigbang	Penny
-927	33	no one can make you get married.	Comfort	00:10:23,789	00:10:25,999	bigbang	Penny
-927	34	why don't you meet this girl, see what happens?	Advise	00:10:26,334	00:10:28,585	bigbang	Penny
-927	35	haven't you been listening? i cannot talk to women.	Complain	00:10:28,753	00:10:31,338	bigbang	Rajesh
-927	36	raj, honey you say you can't talk to women but you've been talking to me.	Comfort	00:10:36,135	00:10:41,014	bigbang	Penny
-927	37	and now we'll never know.	UNK	00:10:41,182	00:10:43,350	bigbang	Sheldon
-927	38	you're right. i-i am talking to you.	Agree	00:10:44,143	00:10:48,355	bigbang	Rajesh
-927	39	hello, penny. how are you?	Greet	00:10:49,273	00:10:51,900	bigbang	Rajesh
-927	40	i'm fine.	UNK	00:10:52,360	00:10:53,610	bigbang	Penny
-927	41	okay, now, i need to make sure i have a lalita before i meet the grasshopper.	UNK	00:10:53,778	00:10:58,239	bigbang	Rajesh
-927	42	it's a sweet green miracle.	Praise	00:11:00,951	00:11:04,204	bigbang	Rajesh
-927	43	happiness?	Doubt	00:11:09,585	00:11:11,378	bigbang	Rajesh
-927	44	freedom?	Doubt	00:11:11,921	00:11:13,088	bigbang	Rajesh
-927	45	this warm glow inside of me that promises everything's going to be all hunky dunky?	Doubt	00:11:13,255	00:11:18,760	bigbang	Rajesh
-927	46	yeah, that.	Agree	00:11:19,178	00:11:20,470	bigbang	Penny
-927	47	why don't you bring her to my restaurant so i can keep an eye on you?	Advise	00:11:20,638	00:11:23,890	bigbang	Penny
-927	48	okay.	Acknowledge	00:11:24,058	00:11:25,684	bigbang	Rajesh
-927	49	what's the plan? let's say he meets her, he likes her, they get married.	Asking for opinions	00:11:26,602	00:11:29,938	bigbang	Leonard
 932	0	i play golf with her father. i won't be able to look at him.	UNK	00:16:34,827	00:16:37,578	bigbang	big bang person2
 932	1	maybe you should keep your eye on the ball, papa.	Advise	00:16:37,746	00:16:40,748	bigbang	Rajesh
 932	2	oh, now you're a funnyman? this is not funny, mr. funnyman.	Criticize	00:16:40,916	00:16:45,086	bigbang	big bang person2
@@ -2689,68 +2639,6 @@ Dialogue_id	Utterance_id	Text	Label	Start_timestamp	End_timestamp	Source	speaker
 1128	5	oh, god. is that veal?	Doubt	00:17:40,642	00:17:42,769	friends	Phoebe
 1128	6	no, that's okay. that's okay. i mean, i am a vegetarian except for veal. yeah. no. veal i love. heh.	Comfort	00:17:46,690	00:17:54,405	friends	Phoebe
 1128	7	so... what do you think?	UNK	00:18:34,279	00:18:37,990	friends	friends person1
-1135	0	they said everybody's really pissed off at me. and they all got to meet santa!	UNK	00:16:54,179	00:16:58,349	friends	Joey
-1135	1	it's easy to remember, and it doesn't invite a lot of questions.	Introduce	00:17:02,646	00:17:06,107	friends	Phoebe
-1135	2	you weren't at the parade, because you had a family emergency.	Explain	00:17:06,316	00:17:10,153	friends	Phoebe
-1135	3	i wasn't at the parade, because i had a family emergency.	Explain	00:17:13,073	00:17:15,950	friends	Joey
-1135	4	what happened?	Care	00:17:16,160	00:17:17,201	friends	Phoebe
-1135	5	we thought it might be nice to use the fancy china for dessert too.	Advise	00:17:27,504	00:17:30,882	friends	Phoebe
-1135	6	hey, dude, you okay? sorry about before.	Apologise	00:17:42,394	00:17:44,729	friends	Ross
-1135	7	but it did hurt my feelings, and i want you to know that if i die you don't get joey.	UNK	00:17:49,276	00:17:56,240	friends	Chandler
-1135	8	in case you hadn't noticed, i'm not talking to you.	UNK	00:18:10,005	00:18:12,048	friends	friends person1
-1135	9	you know, this is just... this is classic rachel.	UNK	00:18:15,177	00:18:17,929	friends	friends person1
-1135	10	right. remember in high school when i died and didn't give you my baby?	Confirm	00:18:18,138	00:18:22,600	friends	Rachel
-1135	11	okay, i went to the zoo yesterday, now i'm a koala bear.	Joke	00:18:39,368	00:18:44,038	friends	Rachel
-1135	12	you didn't come and visit me when i was in the hospital having the baby!	Complain	00:18:50,838	00:18:54,632	friends	Rachel
-1135	13	you didn't come see me in the hospital when i was getting my lips done!	Complain	00:18:54,800	00:18:58,803	friends	friends person1
-1135	14	i did the first time.	UNK	00:18:58,971	00:19:02,473	friends	Rachel
-1135	15	well, how hard could it be? you do it.	UNK	00:19:16,864	00:19:19,073	friends	friends person1
-1135	16	ooh-hoo-hoo-hoo.	UNK	00:19:19,283	00:19:21,117	friends	Joey
-1135	17	because you don't want me to be happy.	Explain	00:19:28,333	00:19:30,585	friends	friends person1
-1135	18	of your lack of responsibility? your immaturity?	Criticize	00:19:34,548	00:19:38,259	friends	Rachel
-1135	19	your total disregard for other people's feelings?	Criticize	00:19:38,427	00:19:41,429	friends	Rachel
-1135	20	to name a few.	UNK	00:19:41,638	00:19:43,973	friends	friends person1
-1135	21	you've always been like this.	Complain	00:19:45,851	00:19:47,476	friends	friends person1
-1135	22	you had to have everything, and i couldn't have anything.	Complain	00:19:47,644	00:19:51,063	friends	friends person1
-1135	23	like in junior high, when you stole timmy from me.	Complain	00:19:51,231	00:19:54,442	friends	friends person1
-1135	24	i mean, do you even realize how much that hurt me?	Confirm	00:19:54,610	00:19:57,486	friends	friends person1
-1135	25	timmy was my boyfriend, and you made out with him!	Complain	00:19:57,696	00:20:00,156	friends	Rachel
-1135	26	i cannot believe that i invited you here today!	Complain	00:20:02,534	00:20:06,704	friends	Rachel
-1135	27	yeah, well, you know what i cannot believe? that my so-called sister gets a 30% discount from ralph lauren, and i still have to pay retail?	Complain	00:20:06,872	00:20:15,796	friends	friends person1
-1135	28	it's 45.	UNK	00:20:18,217	00:20:19,759	friends	Rachel
-1135	29	you bitch.	Criticize	00:20:21,136	00:20:22,970	friends	friends person1
-1135	30	you just think you're so perfect with your new baby and your small apartment.	UNK	00:20:25,515	00:20:31,354	friends	friends person1
-1135	31	too far, amy. too far.	Warn	00:20:39,363	00:20:43,074	friends	Ross
-1135	32	put the plates in the boxes! put the plates in the boxes!	Inform	00:20:59,049	00:21:01,926	friends	Monica
-1135	33	all right, that's it.	UNK	00:21:07,015	00:21:08,307	friends	Rachel
-1135	34	forget the bubble wrap! there isn't time!	Inform	00:21:08,517	00:21:11,310	friends	Monica
-1135	35	frizzy, frizzy, frizzy!	UNK	00:21:13,563	00:21:15,356	friends	Rachel
-1135	36	let's throw some jell-o on them!	Joke	00:21:22,990	00:21:25,366	friends	Joey
-1135	37	all right, that is it! this is our apartment, and you cannot behave this way!	Prevent	00:21:43,302	00:21:48,306	friends	Chandler
-1135	38	if you can't act your age, you shouldn't be here at all.	Criticize	00:21:48,473	00:21:51,225	friends	Chandler
-1135	39	okay. that's better.	UNK	00:22:05,240	00:22:07,158	friends	Chandler
-1135	40	now, i want you to apologize to each other and mean it.	Inform	00:22:07,326	00:22:10,703	friends	Chandler
-1135	41	dude, well done.	Praise	00:22:20,464	00:22:22,381	friends	Ross
-1135	42	if i die and rachel dies and monica dies, you can totally take care of emma.	UNK	00:22:22,591	00:22:27,636	friends	Ross
-1135	43	yeah? well, thanks.	Thank	00:22:28,347	00:22:30,139	friends	Chandler
-1135	44	so... so now do i get joey?	Confirm	00:22:30,640	00:22:33,768	friends	Ross
-1135	45	okay. but you should know he eats a lot and shoves pennies up his nose.	UNK	00:22:35,645	00:22:40,483	friends	Chandler
-1135	46	i mean, these things happen. i mean, it's just a plate.	UNK	00:22:47,949	00:22:51,660	friends	Monica
-1135	47	thank you. it was so beautiful!	Thank	00:22:55,957	00:22:59,919	friends	Monica
-1135	48	i'm gonna go to joey's and get the pies.	Leave	00:23:02,047	00:23:04,298	friends	Monica
-1135	49	actually, not pies. it's just pie.	Emphasize	00:23:04,508	00:23:08,260	friends	Joey
-1135	50	i don't care.	UNK	00:23:09,638	00:23:11,847	friends	Monica
-1135	51	oh, my god, i've lost the will to scold.	UNK	00:23:12,015	00:23:15,601	friends	Monica
-1135	52	...a little out-of-control over there.	UNK	00:23:23,985	00:23:26,821	friends	Rachel
-1135	53	and i'm sorry.	Apologise	00:23:27,531	00:23:28,989	friends	Rachel
-1135	54	you are not gonna regret this.	UNK	00:23:42,254	00:23:45,172	friends	friends person1
-1135	55	i am super confident, totally responsible and fourth in line to raise emma.	UNK	00:23:51,471	00:23:55,975	friends	Chandler
-1135	56	well, what do you know? i guess i'll be the one who dies first.	Taunt	00:24:06,069	00:24:09,155	friends	Chandler
-1135	57	hey. so i'm gonna put the plates back.	Plan	00:24:30,093	00:24:33,679	friends	Chandler
-1135	58	i think you're right. we shouldn't use these plates for a long time.	Agree	00:24:33,847	00:24:37,391	friends	Chandler
-1135	59	hey. i did it.	Greet	00:24:42,147	00:24:43,689	friends	Joey
-1135	60	i told my producer i had a family emergency. he totally bought it.	Inform	00:24:43,899	00:24:47,401	friends	Joey
-1135	61	what?! something happened with the plates?	Doubt	00:24:58,914	00:25:01,749	friends	Monica
 1137	0	wow. heh. wow, you look, uh...   i mean, it's just, uh... that dress, uh...	UNK	00:02:26,771	00:02:36,947	friends	Ross
 1137	1	well, i hope the ends of these sentences are good.	UNK	00:02:37,365	00:02:40,075	friends	Rachel
 1137	2	heh. oh, they're good. it's just been a while since i've seen you like this.	UNK	00:02:40,243	00:02:43,453	friends	Ross

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from transformers import BartModel, BartTokenizer, AutoTokenizer
+from transformers import BartModel, BartTokenizer, AutoTokenizer, BertModel
 
 from src.lib.Seq2Seq import Seq2SeqModel
 from src.lib.State.bart import BartState
@@ -12,8 +12,11 @@ from src.lib.BART.decoder import CaGFBartDecoder
 from src.lib.ulti import get_utt_representation, seq_len_to_mask
 
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 class BartSeq2SeqModel(nn.Module):
-    def __init__(self, label_ids):
+    def __init__(self):
         """
         Define the encoder and decoder
         Initialize the custom tokens
@@ -22,43 +25,20 @@ class BartSeq2SeqModel(nn.Module):
         self.hidden_size = 768
 
         tokenizer = AutoTokenizer.from_pretrained("src/example/log/tokenizer")
-
-        model = BartModel.from_pretrained("facebook/bart-base")
-        num_tokens, _ = model.encoder.embed_tokens.weight.shape
-        model.resize_token_embeddings(len(tokenizer) + num_tokens)
-        encoder = model.encoder
-        decoder = model.decoder
-        _tokenizer = BartTokenizer.from_pretrained("facebook/bart-base")
-        vocab = tokenizer.get_vocab()
-        for token, token_id in vocab.items():
-            if token[:2] == "<<" and len(token) != 2:
-                index = tokenizer.convert_tokens_to_ids(tokenizer.tokenize(token))
-                if len(index) > 1:
-                    raise RuntimeError(f"{token} wrong split")
-                else:
-                    index = index[0]
-                assert index >= num_tokens, (index, num_tokens, token)
-                indexes = _tokenizer.convert_tokens_to_ids(_tokenizer.tokenize(token[2:-2]))
-                embed = model.encoder.embed_tokens.weight.data[indexes[0]]
-                for i in indexes[1:]:
-                    embed += model.decoder.embed_tokens.weight.data[i]
-                embed /= len(indexes)
-                model.decoder.embed_tokens.weight.data[index] = embed
-        self.encoder = FBartEncoder(encoder)
-        # self.decoder = CaGFBartDecoder(decoder, pad_token_id=tokenizer.pad_token_id, label_ids=label_ids)
+        self.encoder = BertModel.from_pretrained("bert-base-cased")
+        self.encoder.resize_token_embeddings(len(tokenizer))
         self.linear_layer = nn.Sequential(nn.Linear(self.hidden_size * 3, 2), nn.ReLU())
         self.graph_att_layer = GraphAttentionLayer(
             in_features=self.hidden_size,
             out_features=self.hidden_size,
-            dropout=0.2,
+            dropout=0.1,
             alpha=0.2,
         )
-        # self.graph_att_layer = GAT(nfeat=self.hidden_size, nhid=self.hidden_size, dropout=0.2, alpha=0.2, nheads=2)
         self.emo_ffn = BartClassificationHead(
             inner_dim=self.hidden_size,
             input_dim=self.hidden_size,
             num_classes=30,
-            pooler_dropout=0.3,
+            pooler_dropout=0.2,
         )
 
     def forward(
@@ -82,51 +62,57 @@ class BartSeq2SeqModel(nn.Module):
         dia_utt_num,
         len_token,
     ):
-        encoder_outputs, encoder_mask, hidden_states = self.encoder(token, len_token)
-        src_embed_outputs = hidden_states[0]
+        encoder_outputs = self.encoder(
+            token[:, 0].to(device), token[:, 1].to(device), token[:, 2].to(device)
+        ).last_hidden_state
+        encoder_outputs_xReact = self.encoder(
+            word_atomic_xReact[:, 0].to(device),
+            word_atomic_xReact[:, 1].to(device),
+            word_atomic_xReact[:, 2].to(device),
+        ).last_hidden_state
+        encoder_outputs_oReact = self.encoder(
+            word_atomic_oReact[:, 0].to(device),
+            word_atomic_oReact[:, 1].to(device),
+            word_atomic_oReact[:, 2].to(device),
+        ).last_hidden_state
+        encoder_outputs_xReact_retrieval = self.encoder(
+            word_retrieval_xReact[:, 0].to(device),
+            word_retrieval_xReact[:, 1].to(device),
+            word_retrieval_xReact[:, 2].to(device),
+        ).last_hidden_state
+        encoder_outputs_oReact_retrieval = self.encoder(
+            word_retrieval_oReact[:, 0].to(device),
+            word_retrieval_oReact[:, 1].to(device),
+            word_retrieval_oReact[:, 2].to(device),
+        ).last_hidden_state
 
         encoder_outputs_utt = get_utt_representation(
             encoder_outputs,
-            utt_prefix_ids,
-            dia_utt_num,
-        )
-        encoder_outputs_xReact, encoder_mask_xReact, hidden_states_xReact = self.encoder(
-            word_atomic_xReact, len_word_atomic_xReact
-        )
-        encoder_outputs_oReact, encoder_mask_oReact, hidden_states_oReact = self.encoder(
-            word_atomic_oReact, len_word_atomic_oReact
-        )
-        encoder_outputs_utt_xReact = get_utt_representation(
-            encoder_outputs_xReact,
-            atomic_prefix_ids_xReact,
-            dia_utt_num,
-        )
-        encoder_outputs_utt_oReact = get_utt_representation(
-            encoder_outputs_oReact,
-            atomic_prefix_ids_oReact,
-            dia_utt_num,
+            utt_prefix_ids.to(device),
+            dia_utt_num.to(device),
         )
 
-        (
-            encoder_outputs_xReact_retrieval,
-            encoder_mask_xReact_retrieval,
-            hidden_states_xReact_retrieval,
-        ) = self.encoder(word_retrieval_xReact, len_word_retrieval_xReact)
-        (
-            encoder_outputs_oReact_retrieval,
-            encoder_mask_oReact_retrieval,
-            hidden_states_oReact_retrieval,
-        ) = self.encoder(word_retrieval_oReact, len_word_retrieval_oReact)
+        encoder_outputs_utt_xReact = get_utt_representation(
+            encoder_outputs_xReact,
+            atomic_prefix_ids_xReact.to(device),
+            dia_utt_num.to(device),
+        )
+
+        encoder_outputs_utt_oReact = get_utt_representation(
+            encoder_outputs_oReact,
+            atomic_prefix_ids_oReact.to(device),
+            dia_utt_num.to(device),
+        )
 
         encoder_outputs_utt_xReact_retrieval = get_utt_representation(
             encoder_outputs_xReact_retrieval,
-            retrieval_prefix_ids_xReact,
-            dia_utt_num,
+            retrieval_prefix_ids_xReact.to(device),
+            dia_utt_num.to(device),
         )
         encoder_outputs_utt_oReact_retrieval = get_utt_representation(
             encoder_outputs_oReact_retrieval,
-            retrieval_prefix_ids_oReact,
-            dia_utt_num,
+            retrieval_prefix_ids_oReact.to(device),
+            dia_utt_num.to(device),
         )
 
         xReact_encoder_outputs_utt = torch.cat(
@@ -168,11 +154,11 @@ class BartSeq2SeqModel(nn.Module):
             encoder_outputs_utt,
             new_xReact_encoder_outputs_utt,
             new_oReact_encoder_outputs_utt,
-            utt_xReact_mask,
-            utt_oReact_mask,
+            utt_xReact_mask.to(device),
+            utt_oReact_mask.to(device),
         )
 
-        utt_mask = seq_len_to_mask(dia_utt_num, max_len=encoder_outputs_utt.size(1))  # bsz x max_utt_len
+        utt_mask = seq_len_to_mask(dia_utt_num.to(device), max_len=encoder_outputs_utt.size(1))  # bsz x max_utt_len
 
         new_encoder_outputs_utt = new_encoder_outputs_utt.masked_fill(
             utt_mask.eq(0).unsqueeze(2).repeat(1, 1, encoder_outputs_utt.size(-1)),

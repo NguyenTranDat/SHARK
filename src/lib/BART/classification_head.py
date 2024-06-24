@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 
 class BartClassificationHead(nn.Module):
@@ -23,4 +24,5 @@ class BartClassificationHead(nn.Module):
         x = torch.tanh(x)
         x = self.dropout(x)
         x = self.out_proj(x)
+        x = F.softmax(x, dim=-1)
         return x
