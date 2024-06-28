@@ -5,6 +5,7 @@ import pickle
 import numpy as np
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from torch.optim import SGD
 from transformers import AdamW
 
 from src.ECTEC.seq2seq_model import BartSeq2SeqModel
@@ -23,11 +24,13 @@ test_data = MMDataset(test_data)
 # print(len(dev_data))
 # print(len(test_data))
 
-train_loader = DataLoader(train_data, batch_size=1, shuffle=True)
+train_loader = DataLoader(train_data, batch_size=1)
 test_loader = DataLoader(test_data, batch_size=1)
-dev_loader = DataLoader(dev_data, batch_size=1)
+# dev_loader = DataLoader(dev_data, batch_size=1)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+print(device)
 
 model = BartSeq2SeqModel()
 model.to(device)
@@ -37,30 +40,36 @@ def each_epoch(batch):
     kwargs = batch.copy()
     kwargs.pop("index")
     # print(kwargs.pop("index"))
-    return kwargs, kwargs.pop("label")
+    return kwargs, kwargs.pop("label").to(device)
 
 
-def check_gradients(model):
-    total_gradients = 0
-    total_parameters = 0
+def train(num_epochs=400):
+    parameters = []
+    params = {"lr": 1e-6, "weight_decay": 1e-2}
+    params["params"] = [param for name, param in model.named_parameters() if not "encoder" in name]
+    parameters.append(params)
+
+    params = {"lr": 1e-6, "weight_decay": 1e-2}
+    params["params"] = []
     for name, param in model.named_parameters():
-        if param.grad is not None:
-            avg_grad = param.grad.abs().mean()
-            print(f"Gradient average for {name}: {avg_grad}")
-            total_gradients += avg_grad.item()
-            total_parameters += 1
-    if total_parameters > 0:
-        print(f"Average gradient for all parameters: {total_gradients / total_parameters}")
+        if "encoder" in name and not ("layernorm" in name or "layer_norm" in name):
+            params["params"].append(param)
+    parameters.append(params)
 
+    params = {"lr": 1e-6, "weight_decay": 0}
+    params["params"] = []
+    for name, param in model.named_parameters():
+        if "encoder" in name and ("layernorm" in name or "layer_norm" in name):
+            params["params"].append(param)
+    parameters.append(params)
 
-def train(num_epochs=100):
-    optimizer = AdamW(model.parameters(), lr=5e-6, correct_bias=False)
+    optimizer = AdamW(parameters, correct_bias=False, no_deprecation_warning=True)
     criterion = nn.CrossEntropyLoss()
 
     start_epoch = 0
     checkpoint_path = "log/model_checkpoint.pth"
     if os.path.exists(checkpoint_path):
-        checkpoint = torch.load(checkpoint_path)
+        checkpoint = torch.load(checkpoint_path, map_location=torch.device(device=device))
         model.load_state_dict(checkpoint["model_state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
         criterion.load_state_dict(checkpoint["criterion_state_dict"])
@@ -75,10 +84,7 @@ def train(num_epochs=100):
 
             outputs = model(**kwargs)
 
-            mask_emo = seq_len_to_mask(torch.LongTensor([label.size(1)]), max_len=label.size(1)).eq(0)
-            tgt_emotions = label.masked_fill(mask_emo, -100)
-            loss = F.cross_entropy(target=tgt_emotions, input=outputs.transpose(1, 2))
-
+            loss = criterion(outputs.transpose(1, 2), label)
             loss.backward()
 
             optimizer.step()

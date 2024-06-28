@@ -76,9 +76,9 @@ def load_checkpoint(model, optimizer, criterion, path):
 
 def eval_score(all_targets, all_predictions):
     acc = accuracy_score(all_targets, all_predictions)
-    f1 = f1_score(all_targets, all_predictions, average="weighted")
-    recall = recall_score(all_targets, all_predictions, average="weighted")
-    precision = precision_score(all_targets, all_predictions, average="weighted")
+    f1 = f1_score(all_targets, all_predictions, average="weighted", zero_division=0)
+    recall = recall_score(all_targets, all_predictions, average="weighted", zero_division=0)
+    precision = precision_score(all_targets, all_predictions, average="weighted", zero_division=0)
 
     return acc * 100, f1 * 100, recall * 100, precision * 100
 

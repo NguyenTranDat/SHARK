@@ -43,10 +43,10 @@ def read_data(file_path: str):
         return [row for row in reader]
 
 
-def get_prefix_ids(word_bpes, start_prefix_id, last_prefix_id):
+def get_prefix_ids(word_bpes, prefix_id):
     utt_prefix_ids = []
     for ii, w_id in enumerate(word_bpes):
-        if w_id >= start_prefix_id and w_id <= last_prefix_id:
+        if w_id == prefix_id:
             utt_prefix_ids.append(ii)
     return utt_prefix_ids
 

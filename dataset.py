@@ -25,13 +25,13 @@ class MIntRec2:
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer)
 
         self.max_utt_num = 65
-        add_tokens = list(MAPPING.values())
-        add_tokens += [f"<<U{i}>>" for i in range(self.max_utt_num)]
-        add_tokens += [f"<<react>>", "<</react>>"]
-        add_tokens += [f"<<xReact{i}>>" for i in range(self.max_utt_num)]
-        add_tokens += [f"<<oReact{i}>>" for i in range(self.max_utt_num)]
+        # add_tokens = list(MAPPING.values())
+        # add_tokens += [f"<<U{i}>>" for i in range(self.max_utt_num)]
+        # add_tokens += [f"<<react>>", "<</react>>"]
+        # add_tokens += [f"<<xReact{i}>>" for i in range(self.max_utt_num)]
+        # add_tokens += [f"<<oReact{i}>>" for i in range(self.max_utt_num)]
 
-        self.tokenizer.add_tokens(add_tokens)
+        # self.tokenizer.add_tokens(add_tokens)
 
         self.target_shift = len(MAPPING) + 1
         self.mapping2id = {}
@@ -57,14 +57,14 @@ class MIntRec2:
             next(reader)
             self.atomic_data = [row for row in reader]
 
-        self.dev_data = self.process_data("src/example/MintRec2/dev.tsv")
+        # self.dev_data = self.process_data("src/example/MintRec2/dev.tsv")
         self.test_data = self.process_data("src/example/MintRec2/test.tsv")
         self.train_data = self.process_data("src/example/MintRec2/train.tsv")
 
         self.tokenizer.save_pretrained("src/example/log/tokenizer")
 
-        with open("src/example/log/dev_data.pkl", "wb") as f:
-            pickle.dump(self.dev_data, f)
+        # with open("src/example/log/dev_data.pkl", "wb") as f:
+        #     pickle.dump(self.dev_data, f)
 
         with open("src/example/log/test_data.pkl", "wb") as f:
             pickle.dump(self.test_data, f)
@@ -103,21 +103,15 @@ class MIntRec2:
                 speakers.append(row[7])
 
                 tmp_atomic = next((entry for entry in self.atomic_data if index in entry), None)
-                atomic_oReact_tokens = self.tokenizer.tokenize(
-                    f"<<oReact{count}>> Others feel {clean_data(tmp_atomic[2])} [SEP]"
-                )
-                atomic_xReact_tokens = self.tokenizer.tokenize(
-                    f"<<xReact{count}>> {row[7]} feels {clean_data(tmp_atomic[8])} [SEP]"
-                )
+                atomic_oReact_tokens = self.tokenizer.tokenize(f"Others feel {clean_data(tmp_atomic[2])} [SEP]")
+                atomic_xReact_tokens = self.tokenizer.tokenize(f"{row[7]} feels {clean_data(tmp_atomic[8])} [SEP]")
 
                 tmp_retrieval = next((entry for entry in self.kg_retrieval if index in entry), None)
-                retrieval_oReact_tokens = self.tokenizer.tokenize(
-                    f"<<oReact{count}>> Others feel {clean_data(tmp_retrieval[1])} [SEP]"
-                )
+                retrieval_oReact_tokens = self.tokenizer.tokenize(f"Others feel {clean_data(tmp_retrieval[1])} [SEP]")
                 retrieval_xReact_tokens = self.tokenizer.tokenize(
-                    f"<<xReact{count}>> {row[7]} feels {clean_data(tmp_retrieval[2])} [SEP]"
+                    f"{row[7]} feels {clean_data(tmp_retrieval[2])} [SEP]"
                 )
-                tokens = self.tokenizer.tokenize(f"<<U{count}>> {row[7]}: {clean_data(row[2])} [SEP]")
+                tokens = self.tokenizer.tokenize(f"{row[7]}: {clean_data(row[2])} [SEP]")
 
                 if count == 0:
                     atomic_oReact_tokens = ["[CLS]"] + atomic_oReact_tokens
@@ -162,28 +156,23 @@ class MIntRec2:
     def _process_batch_data(self, index, word, atomic, retrieval, speakers, label, count):
         utt_prefix_ids = get_prefix_ids(
             word[0],
-            self.tokenizer.convert_tokens_to_ids("<<U0>>"),
-            self.tokenizer.convert_tokens_to_ids(f"<<U{self.max_utt_num-1}>>"),
+            self.tokenizer.convert_tokens_to_ids("[SEP]"),
         )
         atomic_prefix_ids_xReact = get_prefix_ids(
             atomic["xReact"][0],
-            self.tokenizer.convert_tokens_to_ids("<<xReact0>>"),
-            self.tokenizer.convert_tokens_to_ids(f"<<xReact{self.max_utt_num-1}>>"),
+            self.tokenizer.convert_tokens_to_ids("[SEP]"),
         )
         atomic_prefix_ids_oReact = get_prefix_ids(
             atomic["oReact"][0],
-            self.tokenizer.convert_tokens_to_ids("<<oReact0>>"),
-            self.tokenizer.convert_tokens_to_ids(f"<<oReact{self.max_utt_num-1}>>"),
+            self.tokenizer.convert_tokens_to_ids("[SEP]"),
         )
         retrieval_prefix_ids_xReact = get_prefix_ids(
             retrieval["xReact"][0],
-            self.tokenizer.convert_tokens_to_ids("<<xReact0>>"),
-            self.tokenizer.convert_tokens_to_ids(f"<<xReact{self.max_utt_num-1}>>"),
+            self.tokenizer.convert_tokens_to_ids("[SEP]"),
         )
         retrieval_prefix_ids_oReact = get_prefix_ids(
             retrieval["oReact"][0],
-            self.tokenizer.convert_tokens_to_ids("<<oReact0>>"),
-            self.tokenizer.convert_tokens_to_ids(f"<<oReact{self.max_utt_num-1}>>"),
+            self.tokenizer.convert_tokens_to_ids("[SEP]"),
         )
 
         utt_xReact_mask = [[0] * self.max_utt_num for _ in range(self.max_utt_num)]
@@ -200,15 +189,10 @@ class MIntRec2:
             "index": index,
             "dia_utt_num": count,
             "token": torch.LongTensor(word),
-            "len_token": len(word[0]),
             "word_atomic_oReact": torch.LongTensor(atomic["oReact"]),
-            "len_word_atomic_oReact": len(atomic["oReact"][0]),
             "word_atomic_xReact": torch.LongTensor(atomic["xReact"]),
-            "len_word_atomic_xReact": len(atomic["xReact"][0]),
             "word_retrieval_xReact": torch.LongTensor(retrieval["xReact"]),
-            "len_word_retrieval_xReact": len(retrieval["oReact"][0]),
             "word_retrieval_oReact": torch.LongTensor(retrieval["oReact"]),
-            "len_word_retrieval_oReact": len(retrieval["oReact"][0]),
             "utt_prefix_ids": torch.LongTensor(utt_prefix_ids),
             "atomic_prefix_ids_xReact": torch.LongTensor(atomic_prefix_ids_xReact),
             "atomic_prefix_ids_oReact": torch.LongTensor(atomic_prefix_ids_oReact),

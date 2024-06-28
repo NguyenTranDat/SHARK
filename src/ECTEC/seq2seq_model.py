@@ -24,10 +24,10 @@ class BartSeq2SeqModel(nn.Module):
         super(BartSeq2SeqModel, self).__init__()
         self.hidden_size = 768
 
-        tokenizer = AutoTokenizer.from_pretrained("src/example/log/tokenizer")
+        # tokenizer = AutoTokenizer.from_pretrained("src/example/log/tokenizer")
         self.encoder = BertModel.from_pretrained("bert-base-cased")
-        self.encoder.resize_token_embeddings(len(tokenizer))
-        self.linear_layer = nn.Sequential(nn.Linear(self.hidden_size * 3, 2), nn.ReLU())
+        # self.encoder.resize_token_embeddings(len(tokenizer))
+        self.linear_layer = nn.Sequential(nn.Linear(self.hidden_size * 3, 2), nn.Sigmoid())
         self.graph_att_layer = GraphAttentionLayer(
             in_features=self.hidden_size,
             out_features=self.hidden_size,
@@ -38,7 +38,7 @@ class BartSeq2SeqModel(nn.Module):
             inner_dim=self.hidden_size,
             input_dim=self.hidden_size,
             num_classes=30,
-            pooler_dropout=0.2,
+            pooler_dropout=0.1,
         )
 
     def forward(
@@ -53,14 +53,9 @@ class BartSeq2SeqModel(nn.Module):
         retrieval_prefix_ids_xReact,
         retrieval_prefix_ids_oReact,
         utt_prefix_ids,
-        len_word_atomic_oReact,
-        len_word_atomic_xReact,
-        len_word_retrieval_xReact,
-        len_word_retrieval_oReact,
         utt_xReact_mask,
         utt_oReact_mask,
         dia_utt_num,
-        len_token,
     ):
         encoder_outputs = self.encoder(
             token[:, 0].to(device), token[:, 1].to(device), token[:, 2].to(device)
