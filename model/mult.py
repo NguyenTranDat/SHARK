@@ -63,7 +63,9 @@ class MULT(nn.Module):
         else:
             raise ValueError("Unknown network type")
 
-        return TransformerEncoder(embed_dim=d_model, num_heads=MULT_NUM_HEAD, layers=max(MULT_NUM_LAYER, layers))
+        return TransformerEncoder(
+            embed_dim=d_model, num_heads=MULT_NUM_HEAD, layers=max(MULT_NUM_LAYER, layers), embed_dropout=dropout
+        )
 
     def forward(self, text_feats, video_feats, audio_feats):
         text_feats = F.dropout(text_feats, p=self.embed_dropout, training=self.training)

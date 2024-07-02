@@ -28,6 +28,7 @@ class ProcessData:
         self.data_train: Dataset
         self.data_val: Dataset
         self.data_test: Dataset
+        self.data_argument: Dataset
 
         self.audio = Audio(
             DATA_DIR + "audio_feats.pkl",
@@ -42,23 +43,24 @@ class ProcessData:
         self.tokenizer = BertTokenizer.from_pretrained(TOKENIZER, do_lower_case=True)
 
         self.label: dict = {}
+        self.binary_label: dict = {}
 
         if DATA_VERSION in ["MintREC2.0"]:
             pass
         elif DATA_VERSION in ["MintREC"]:
             self.index_text = 3
             intent_labels = benchmark["intent_labels"]
+            binary_intent_labels = benchmark["binary_intent_labels"]
 
         for intent_label in intent_labels:
             self.label[intent_label] = len(self.label)
 
+        for binary_intent_label in binary_intent_labels:
+            self.binary_label[binary_intent_label] = len(self.binary_label)
+
     def setup(self):
         if not os.path.exists(DATA_DIR):
             raise FileNotFoundError(f"The directory {DATA_DIR} does not exist.")
-        # else:
-        #     self.data_val = self.__make_data(DATA_DIR + "dev.tsv")
-        #     self.data_train = self.__make_data(DATA_DIR + "train.tsv")
-        #     self.data_test = self.__make_data(DATA_DIR + "test.tsv")
 
         self.audio.setup()
         self.video.setup()
@@ -71,6 +73,7 @@ class ProcessData:
         threads.append(threading.Thread(target=load_data, args=("data_val", DATA_DIR + "dev.tsv")))
         threads.append(threading.Thread(target=load_data, args=("data_train", DATA_DIR + "train.tsv")))
         threads.append(threading.Thread(target=load_data, args=("data_test", DATA_DIR + "test.tsv")))
+        threads.append(threading.Thread(target=load_data, args=("data_argument", DATA_DIR + "augment_train.tsv")))
 
         for thread in threads:
             thread.start()
@@ -86,6 +89,7 @@ class ProcessData:
         for index, row in data.iterrows():
             text = row.iloc[self.index_text]
             label = self.label[row.iloc[self.index_text + 1]]
+            binary_label = self.binary_label[benchmark["binary_maps"][row.iloc[self.index_text + 1]]]
 
             index: str
             if DATA_VERSION in ["MintREC2.0"]:
@@ -112,10 +116,11 @@ class ProcessData:
             result.append(
                 {
                     "text": torch.tensor([tokens, mask, segment_ids]),
-                    "audio": torch.tensor(audio),
-                    "video": torch.tensor(video),
+                    "audio": audio,
+                    "video": video,
                     "label": label,
                     "index": index,
+                    "label_binary": binary_label,
                 }
             )
 

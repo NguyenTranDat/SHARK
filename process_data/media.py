@@ -4,6 +4,9 @@ import numpy as np
 from ulti.read_data import read_pickle
 
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 class MediaBase:
     def __init__(self, data_path: str, max_length: int, max_seq: int):
         self.data_path = data_path
@@ -11,13 +14,16 @@ class MediaBase:
         self.max_seq = max_seq
         self.data: dict = {}
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
     def setup(self) -> None:
         self.data = read_pickle(self.data_path)
 
     def get_value(self, key: str) -> torch.FloatTensor:
-        return self.data[key].to(self.device)
+        feature = self.data.get(key, None)
+
+        if feature is None:
+            return torch.tensor([0]).to(device)
+        return feature.to(device)
+        # return self.data[key].to(self.device)
 
     def _padding(self, feat: torch.FloatTensor) -> torch.FloatTensor:
         mdeia_length = feat.shape[0]
@@ -27,7 +33,7 @@ class MediaBase:
         pad = np.zeros([self.max_seq - mdeia_length, feat.shape[-1]])
         feat = np.concatenate((feat, pad), axis=0)
 
-        return torch.FloatTensor(feat).to(self.device)
+        return torch.FloatTensor(feat).to(device)
 
     def _padding_feats(self) -> dict:
         raise NotImplemented(f"Class {self.__class__} must implement")

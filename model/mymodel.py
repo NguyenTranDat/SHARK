@@ -22,7 +22,7 @@ benchmark = benchmarks[DATA_VERSION]
 
 
 class MyModel(nn.Module):
-    def __init__(self):
+    def __init__(self, num_labels: int = 1000):
         super(MyModel, self).__init__()
         self.hidden_dim = 768
 
@@ -37,13 +37,21 @@ class MyModel(nn.Module):
         self.mult_text = nn.Linear(MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["text"])
         self.mult_video = nn.Linear(MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["video"])
         self.mult_audio = nn.Linear(MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["audio"])
+
         self.sdif_layer = SDIF().to(device)
 
         self.fusion = nn.Sequential(
             nn.Linear(SDIF_FEATURE_DIM * 7, SDIF_FEATURE_DIM * 3),
             nn.Dropout(0.1),
             nn.GELU(),
-            nn.Linear(SDIF_FEATURE_DIM * 3, len(benchmark["intent_labels"])),
+            nn.Linear(SDIF_FEATURE_DIM * 3, num_labels),
+        )
+
+        self.fusion_argument = nn.Sequential(
+            nn.Linear(SDIF_FEATURE_DIM, SDIF_FEATURE_DIM),
+            nn.Dropout(0.1),
+            nn.GELU(),
+            nn.Linear(SDIF_FEATURE_DIM, num_labels),
         )
 
     def forward(self, text, audio, video):
@@ -113,5 +121,14 @@ class MyModel(nn.Module):
         all_reps = torch.stack((text_rep, video_rep, audio_rep, mult_text_rep, mult_audio_rep, mult_video_rep), dim=0)
         deep_rep = self.sdif_layer(all_reps, shallow_seq, bert_sent_mask, video_mask, audio_mask)
         logits = self.fusion(deep_rep)
+
+        return logits
+
+    def argument(self, text):
+        text_outputs = self.bert(input_ids=text[:, 0], attention_mask=text[:, 1], token_type_ids=text[:, 2])
+        text_seq = text_outputs["last_hidden_state"]
+        text_rep = text_outputs["pooler_output"]
+
+        logits = self.fusion_argument(text_rep)
 
         return logits

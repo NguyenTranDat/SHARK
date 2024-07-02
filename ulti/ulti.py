@@ -65,7 +65,7 @@ def evalution(labels, predicts):
 def plot_confusion_matrix(all_targets, all_predictions, file_path: str = "confusion_matrix.png"):
     cm = confusion_matrix(all_targets, all_predictions)
     class_names = benchmark["intent_labels"]
-    fig, ax = plt.subplots(figsize=(14, 12))
+    fig, ax = plt.subplots(figsize=(12, 10))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
     plt.ylabel("Actual")
     plt.xlabel("Predicted")

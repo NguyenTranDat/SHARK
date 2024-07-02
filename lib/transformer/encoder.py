@@ -26,9 +26,9 @@ class TransformerEncoder(nn.Module):
         embed_dim,
         num_heads,
         layers,
-        attn_dropout=0.0,
-        relu_dropout=0.0,
-        res_dropout=0.0,
+        attn_dropout=0.1,
+        relu_dropout=0.1,
+        res_dropout=0.1,
         embed_dropout=0.0,
         attn_mask=False,
     ):
