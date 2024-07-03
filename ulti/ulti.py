@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 import torch
 from torch.utils.data import DataLoader
 from sklearn.metrics import (
@@ -14,13 +13,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from process_data.benchmarks import benchmarks
+from constants import Config
 
-dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
-load_dotenv(dotenv_path)
-
-DATA_VERSION = os.getenv("DATA_VERSION")
-
-benchmark = benchmarks[DATA_VERSION]
+benchmark = benchmarks[Config.DATA_VERSION]
 
 
 def save_model(epoch, model, optimizer, criterion, path):

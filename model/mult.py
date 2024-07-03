@@ -1,22 +1,14 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import os
-from dotenv import load_dotenv
 
 from lib.transformer.encoder import TransformerEncoder
 from process_data.benchmarks import benchmarks
+from constants import Config
 
-dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
-load_dotenv(dotenv_path)
-
-DATA_VERSION = os.getenv("DATA_VERSION")
-MULT_DIM_MODEL = int(os.getenv("MULT_DIM_MODEL"))
-MULT_NUM_HEAD = int(os.getenv("MULT_NUM_HEAD"))
-MULT_NUM_LAYER = int(os.getenv("MULT_NUM_LAYER"))
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-benchmark = benchmarks[DATA_VERSION]
+benchmark = benchmarks[Config.DATA_VERSION]
 
 
 class MULT(nn.Module):
@@ -24,7 +16,7 @@ class MULT(nn.Module):
         super(MULT, self).__init__()
 
         self.embed_dropout = 0.25
-        self.d_l, self.d_a, self.d_v = MULT_DIM_MODEL, MULT_DIM_MODEL, MULT_DIM_MODEL
+        self.d_l, self.d_a, self.d_v = Config.MULT_DIM_MODEL, Config.MULT_DIM_MODEL, Config.MULT_DIM_MODEL
 
         self.max_seq_alignment_text = nn.Conv1d(
             benchmark["max_seq_lengths"]["text"], self.d_l, kernel_size=5, padding=0, bias=False
@@ -64,7 +56,10 @@ class MULT(nn.Module):
             raise ValueError("Unknown network type")
 
         return TransformerEncoder(
-            embed_dim=d_model, num_heads=MULT_NUM_HEAD, layers=max(MULT_NUM_LAYER, layers), embed_dropout=dropout
+            embed_dim=d_model,
+            num_heads=Config.MULT_NUM_HEAD,
+            layers=max(Config.MULT_NUM_LAYER, layers),
+            embed_dropout=dropout,
         )
 
     def forward(self, text_feats, video_feats, audio_feats):
@@ -90,13 +85,13 @@ class MULT(nn.Module):
 
         # (L,V) --> A
         audio_with_text = self.transfer_audio_with_text(audio_alignment_seq, text_alignment_seq, text_alignment_seq)
-        audio_with_video = self.transfer_audio_with_video(audio_alignment_seq, video_alignment_seq, video_alignment_seq)
+        audio_with_video = self.transfer_audio_with_video(audio_alignment_seq, text_alignment_seq, text_alignment_seq)
         audio_with_text_video = torch.cat([audio_with_text, audio_with_video], dim=2)
         audio_with_text_video = self.transfer_audio_mem(audio_with_text_video)
 
         # (L,A) --> V
         video_with_text = self.transfer_video_with_text(video_alignment_seq, text_alignment_seq, text_alignment_seq)
-        video_with_audio = self.transfer_video_with_audio(video_alignment_seq, audio_alignment_seq, audio_alignment_seq)
+        video_with_audio = self.transfer_video_with_audio(video_alignment_seq, text_alignment_seq, text_alignment_seq)
         video_with_text_audio = torch.cat([video_with_text, video_with_audio], dim=2)
         video_with_text_audio = self.transfer_video_mem(video_with_text_audio)
 

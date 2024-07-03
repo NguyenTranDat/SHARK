@@ -1,24 +1,19 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import os
-from dotenv import load_dotenv
 
-dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
-load_dotenv(dotenv_path)
-
-SDIF_FEATURE_DIM = int(os.getenv("SDIF_FEATURE_DIM"))
-SDIF_NUMLAYER_SELF_ATTENTION = int(os.getenv("SDIF_NUMLAYER_SELF_ATTENTION"))
-SDIF_NUM_HEAD = int(os.getenv("SDIF_NUM_HEAD"))
+from constants import Config
 
 
 class SDIF(nn.Module):
     def __init__(self):
         super(SDIF, self).__init__()
-        self.mlp_project = nn.Sequential(nn.Linear(SDIF_FEATURE_DIM, SDIF_FEATURE_DIM), nn.Dropout(0.1), nn.GELU())
+        self.mlp_project = nn.Sequential(
+            nn.Linear(Config.SDIF_FEATURE_DIM, Config.SDIF_FEATURE_DIM), nn.Dropout(0.1), nn.GELU()
+        )
 
-        encoder_layer = nn.TransformerEncoderLayer(d_model=SDIF_FEATURE_DIM, nhead=SDIF_NUM_HEAD)
-        self.self_attention = nn.TransformerEncoder(encoder_layer, num_layers=SDIF_NUMLAYER_SELF_ATTENTION)
+        encoder_layer = nn.TransformerEncoderLayer(d_model=Config.SDIF_FEATURE_DIM, nhead=Config.SDIF_NUM_HEAD)
+        self.self_attention = nn.TransformerEncoder(encoder_layer, num_layers=Config.SDIF_NUMLAYER_SELF_ATTENTION)
 
     def forward(self, all_reps, shallow_seq, text_mask, video_mask, audio_mask):
         # Third layer: mlp->VAL

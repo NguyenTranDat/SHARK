@@ -5,6 +5,9 @@ from torch.utils.data import DataLoader
 import lightning as L
 import os
 from dotenv import load_dotenv
+import wandb
+from comet_ml import Experiment
+from datetime import datetime
 
 from model.mymodel import MyModel
 from process_data.dataset import MIntRec
@@ -12,34 +15,48 @@ from process_data.benchmarks import benchmarks
 from ulti.ulti import save_model, evalution, load_model, plot_confusion_matrix
 from ulti.create_folder import create_folder_if_not_exists, delete_folder_if_exists
 from ulti.read_data import read_pickle
+from constants import Config
 
-dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
-load_dotenv(dotenv_path)
-
-DATA_VERSION = os.getenv("DATA_VERSION")
-LEARNING_RATE = float(os.getenv("LEARNING_RATE"))
-LOG_CONFUSION_MATRIX = os.getenv("LOG_CONFUSION_MATRIX")
-NUM_EPOCH_ARGUMENT = int(os.getenv("NUM_EPOCH_ARGUMENT"))
-BATCH_SIZE = int(os.getenv("BATCH_SIZE"))
-LOG_DATA_PATH = os.getenv("LOG_DATA_PATH")
+current_time = datetime.now().strftime("%Y%m%d-%H%M%S")
+wandb.init(
+    project=Config.DATA_VERSION,
+    name=f"{Config.DATA_VERSION}_{current_time}",
+    config={
+        "learning_rate": Config.LEARNING_RATE,
+        "architecture": "MULT_SDIF",
+        "dataset": Config.DATA_VERSION,
+        "epochs": Config.NUM_EPOCH,
+    },
+)
+experiment = Experiment(
+    api_key=Config.COMET_API_KEY,
+    project_name=Config.DATA_VERSION,
+    workspace=Config.COMET_WORKSPACE,
+)
+experiment.set_name(f"{Config.DATA_VERSION}_{current_time}")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-benchmark = benchmarks[DATA_VERSION]
+benchmark = benchmarks[Config.DATA_VERSION]
 
-delete_folder_if_exists(LOG_CONFUSION_MATRIX)
-create_folder_if_not_exists(LOG_CONFUSION_MATRIX)
+# delete_folder_if_exists(Config.LOG_CONFUSION_MATRIX)
+# create_folder_if_not_exists(Config.LOG_CONFUSION_MATRIX)
 
 
 class MintRecModule(L.LightningModule):
-    def __init__(self):
+    def __init__(self, learning_rate: float = 3e-5):
         super().__init__()
         self.model = MyModel(num_labels=len(benchmark["intent_labels"])).to(device)
         self.criterion = nn.CrossEntropyLoss()
+        self.lr = learning_rate
 
         self.save_hyperparameters()
+        wandb.config.update(self.hparams)
+        experiment.log_parameters(self.hparams)
 
         self.all_labels = []
         self.all_predicted = []
+        self.loss = []
+        self.train_loss = []
 
     def forward(self, text, video, audio):
         return self.model(text, video, audio)
@@ -56,23 +73,22 @@ class MintRecModule(L.LightningModule):
 
     def training_step(self, batch, batch_idx):
         loss, outputs, target = self.each_epoch(batch, batch_idx)
-        self.log("train_loss", loss)
-
+        self.train_loss.append(loss.item())
         return loss
 
     def validation_step(self, batch, batch_idx):
         loss, outputs, target = self.each_epoch(batch, batch_idx)
+        self.loss.append(loss.item())
 
         _, predicted = torch.max(outputs, 1)
         self.all_labels.extend(target.cpu().numpy())
         self.all_predicted.extend(predicted.cpu().numpy())
 
-        self.log("val_loss", loss)
         return loss
 
     def test_step(self, batch, batch_idx):
         loss, outputs, target = self.each_epoch(batch, batch_idx)
-        self.log("test_loss", loss)
+        self.loss.append(loss.item())
 
         _, predicted = torch.max(outputs.data, 1)
         self.all_labels.extend(target.cpu().numpy())
@@ -80,18 +96,40 @@ class MintRecModule(L.LightningModule):
 
         return loss
 
-    def on_validation_epoch_end(self) -> None:
-        self.epoch_end(file_path=f"confusion_matrix_{self.current_epoch}.png")
+    def on_train_epoch_end(self):
+        avg_loss = sum(self.train_loss) / len(self.train_loss)
+        wandb.log({"train_loss_epoch": avg_loss, "epoch": self.current_epoch})
+        experiment.log_metric("train_loss_epoch", avg_loss, epoch=self.current_epoch)
+        self.train_loss.clear()
 
-    def on_test_epoch_end(self) -> None:
-        self.epoch_end(file_path=f"confusion_matrix_test.png")
+        current_lr = self.trainer.optimizers[0].param_groups[0]["lr"]
+        wandb.log({"learning_rate": current_lr, "epoch": self.current_epoch})
+        experiment.log_metric("learning_rate", current_lr, epoch=self.current_epoch)
 
-    def epoch_end(self, file_path: str) -> None:
+    def on_validation_epoch_end(self):
+        self.epoch_end(stage="val")
+
+    def on_test_epoch_end(self):
+        self.epoch_end(stage="test")
+
+    def epoch_end(self, stage: str):
         accuracy, f1, precision, recall = evalution(self.all_labels, self.all_predicted)
-        # plot_confusion_matrix(self.all_labels, self.all_predicted, f"{LOG_CONFUSION_MATRIX}/{file_path}")
+        kwargs_result_metric = {
+            f"{stage}_accuracy": accuracy,
+            f"{stage}_f1": f1,
+            f"{stage}_precision": precision,
+            f"{stage}_recall": recall,
+        }
+        wandb.log(kwargs_result_metric.push("epoch", self.current_epoch))
+        experiment.log_metrics(kwargs_result_metric, epoch=self.current_epoch)
 
         self.all_labels.clear()
         self.all_predicted.clear()
+
+        avg_loss = sum(self.loss) / len(self.loss)
+        wandb.log({f"{stage}_loss_epoch": avg_loss, "epoch": self.current_epoch})
+        experiment.log_metric(f"{stage}_loss_epoch", avg_loss, epoch=self.current_epoch)
+        self.loss.clear()
 
     def configure_optimizers(self):
         param_optimizer = list(self.model.named_parameters())
@@ -101,9 +139,8 @@ class MintRecModule(L.LightningModule):
             {"params": [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], "weight_decay": 0.0},
         ]
 
-        optimizer = optim.AdamW(optimizer_grouped_parameters, lr=LEARNING_RATE)
-
-        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+        optimizer = optim.AdamW(optimizer_grouped_parameters, lr=self.lr)
+        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.7)
 
         return {
             "optimizer": optimizer,
@@ -122,18 +159,25 @@ class MintRecModule(L.LightningModule):
         return checkpoint
 
     def argument(self):
-        optimizer = optim.AdamW(self.model.parameters(), lr=1e-06, weight_decay=0.1)
+        param_optimizer = list(self.model.named_parameters())
+        no_decay = ["bias", "LayerNorm.bias", "LayerNorm.weight"]
+        optimizer_grouped_parameters = [
+            {"params": [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], "weight_decay": 0.01},
+            {"params": [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], "weight_decay": 0.0},
+        ]
 
-        data_argument = read_pickle(f"{LOG_DATA_PATH}/data_argument.pkl")
+        optimizer = optim.AdamW(optimizer_grouped_parameters, lr=self.lr * 0.5)
+
+        data_argument = read_pickle(f"{Config.LOG_DATA_PATH}/data_argument.pkl")
         data_argument = MIntRec(data_argument)
-        data_argument = DataLoader(data_argument, batch_size=BATCH_SIZE, shuffle=True)
+        data_argument = DataLoader(data_argument, batch_size=Config.BATCH_SIZE, shuffle=True)
 
-        for epoch in range(NUM_EPOCH_ARGUMENT):
+        for epoch in range(Config.NUM_EPOCH_ARGUMENT):
             total_loss = 0
             self.model.train()
             for batch in data_argument:
                 text = batch.pop("text").to(device)
-                target = batch.pop("label")
+                target = batch.pop("label").to(device)
 
                 outputs = self.model.argument(text)
                 loss = self.criterion(outputs, target)

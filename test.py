@@ -1,13 +1,27 @@
-from lightning import Trainer
-from process_data.data_module import MIntRecDataModule
+import os
+from dotenv import load_dotenv
 
+from comet_ml import Experiment
+import wandb
 
-mnist = MIntRecDataModule()
-mnist.prepare_data()
+# Load environment variables from .env file
+load_dotenv(".env")
 
-breakpoint()
+# Initialize Comet ML
+experiment = Experiment(
+    api_key=os.getenv("COMET_API_KEY"),
+    project_name=os.getenv("COMET_PROJECT_NAME"),
+    workspace=os.getenv("COMET_WORKSPACE"),
+)
 
-trainer = Trainer()
+# Initialize WandB
+wandb.init(
+    project=os.getenv("COMET_PROJECT_NAME"),
+    config={
+        "learning_rate": 3e-5,
+        "batch_size": 8,
+        # Add other hyperparameters here
+    },
+)
 
-model = LitClassifier()
-trainer.fit(model, mnist)
+# Your code continues here

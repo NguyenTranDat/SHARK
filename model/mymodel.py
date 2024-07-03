@@ -1,5 +1,3 @@
-import os
-from dotenv import load_dotenv
 import torch
 import torch.nn as nn
 import torch.nn.functional as f
@@ -8,17 +6,10 @@ from transformers import BertModel
 from process_data.benchmarks import benchmarks
 from model.mult import MULT
 from model.sidf import SDIF
-
-dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
-load_dotenv(dotenv_path)
-
-DATA_VERSION = os.getenv("DATA_VERSION")
-TOKENIZER = os.getenv("TOKENIZER")
-MULT_DIM_MODEL = int(os.getenv("MULT_DIM_MODEL"))
-SDIF_FEATURE_DIM = int(os.getenv("SDIF_FEATURE_DIM"))
+from constants import Config
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-benchmark = benchmarks[DATA_VERSION]
+benchmark = benchmarks[Config.DATA_VERSION]
 
 
 class MyModel(nn.Module):
@@ -26,32 +17,32 @@ class MyModel(nn.Module):
         super(MyModel, self).__init__()
         self.hidden_dim = 768
 
-        self.bert = BertModel.from_pretrained(TOKENIZER)
+        self.bert = BertModel.from_pretrained(Config.TOKENIZER)
 
-        self.hidden_dim_alignment_text = nn.Linear(benchmark["feat_dims"]["text"][TOKENIZER], self.hidden_dim)
+        self.hidden_dim_alignment_text = nn.Linear(benchmark["feat_dims"]["text"][Config.TOKENIZER], self.hidden_dim)
         self.hidden_dim_alignment_audio = nn.Linear(benchmark["feat_dims"]["audio"], self.hidden_dim)
         self.hidden_dim_alignment_video = nn.Linear(benchmark["feat_dims"]["video"], self.hidden_dim)
 
         self.mult_layer = MULT().to(device)
 
-        self.mult_text = nn.Linear(MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["text"])
-        self.mult_video = nn.Linear(MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["video"])
-        self.mult_audio = nn.Linear(MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["audio"])
+        self.mult_text = nn.Linear(Config.MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["text"])
+        self.mult_video = nn.Linear(Config.MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["video"])
+        self.mult_audio = nn.Linear(Config.MULT_DIM_MODEL * 2, benchmark["max_seq_lengths"]["audio"])
 
         self.sdif_layer = SDIF().to(device)
 
         self.fusion = nn.Sequential(
-            nn.Linear(SDIF_FEATURE_DIM * 7, SDIF_FEATURE_DIM * 3),
+            nn.Linear(Config.SDIF_FEATURE_DIM * 7, Config.SDIF_FEATURE_DIM * 3),
             nn.Dropout(0.1),
             nn.GELU(),
-            nn.Linear(SDIF_FEATURE_DIM * 3, num_labels),
+            nn.Linear(Config.SDIF_FEATURE_DIM * 3, num_labels),
         )
 
         self.fusion_argument = nn.Sequential(
-            nn.Linear(SDIF_FEATURE_DIM, SDIF_FEATURE_DIM),
+            nn.Linear(Config.SDIF_FEATURE_DIM, Config.SDIF_FEATURE_DIM),
             nn.Dropout(0.1),
             nn.GELU(),
-            nn.Linear(SDIF_FEATURE_DIM, num_labels),
+            nn.Linear(Config.SDIF_FEATURE_DIM, num_labels),
         )
 
     def forward(self, text, audio, video):
