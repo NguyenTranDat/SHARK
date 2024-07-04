@@ -10,11 +10,12 @@ from manager.MintRec import MintRecModule
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-data_module = MIntRecDataModule()
-model = MintRecModule(learning_rate=Config.LEARNING_RATE)
-# model.argument()
+for lr in Config.LEARNING_RATE:
+    data_module = MIntRecDataModule()
+    model = MintRecModule(learning_rate=lr)
+    # model.argument()
 
-trainer = L.Trainer(max_epochs=Config.NUM_EPOCH)
-trainer.fit(model, datamodule=data_module)
+    trainer = L.Trainer(max_epochs=Config.NUM_EPOCH)
+    trainer.fit(model, datamodule=data_module)
 
-results = trainer.test(model, datamodule=data_module)
+    results = trainer.test(model, datamodule=data_module)

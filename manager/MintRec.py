@@ -98,12 +98,12 @@ class MintRecModule(L.LightningModule):
 
     def on_train_epoch_end(self):
         avg_loss = sum(self.train_loss) / len(self.train_loss)
-        wandb.log({"train_loss_epoch": avg_loss, "epoch": self.current_epoch})
+        wandb.log({"train_loss_epoch": avg_loss})
         experiment.log_metric("train_loss_epoch", avg_loss, epoch=self.current_epoch)
         self.train_loss.clear()
 
         current_lr = self.trainer.optimizers[0].param_groups[0]["lr"]
-        wandb.log({"learning_rate": current_lr, "epoch": self.current_epoch})
+        wandb.log({"learning_rate": current_lr})
         experiment.log_metric("learning_rate", current_lr, epoch=self.current_epoch)
 
     def on_validation_epoch_end(self):
@@ -120,14 +120,14 @@ class MintRecModule(L.LightningModule):
             f"{stage}_precision": precision,
             f"{stage}_recall": recall,
         }
-        wandb.log(kwargs_result_metric.push("epoch", self.current_epoch))
+        wandb.log(kwargs_result_metric)
         experiment.log_metrics(kwargs_result_metric, epoch=self.current_epoch)
 
         self.all_labels.clear()
         self.all_predicted.clear()
 
         avg_loss = sum(self.loss) / len(self.loss)
-        wandb.log({f"{stage}_loss_epoch": avg_loss, "epoch": self.current_epoch})
+        wandb.log({f"{stage}_loss_epoch": avg_loss})
         experiment.log_metric(f"{stage}_loss_epoch", avg_loss, epoch=self.current_epoch)
         self.loss.clear()
 
@@ -140,16 +140,18 @@ class MintRecModule(L.LightningModule):
         ]
 
         optimizer = optim.AdamW(optimizer_grouped_parameters, lr=self.lr)
-        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.7)
+        # scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.7)
 
-        return {
-            "optimizer": optimizer,
-            "lr_scheduler": {
-                "scheduler": scheduler,
-                "interval": "epoch",
-                "frequency": 1,
-            },
-        }
+        return optimizer
+
+        # return {
+        #     "optimizer": optimizer,
+        #     "lr_scheduler": {
+        #         "scheduler": scheduler,
+        #         "interval": "epoch",
+        #         "frequency": 1,
+        #     },
+        # }
 
     def on_load_checkpoint(self, checkpoint: dict) -> None:
         self.load_state_dict(checkpoint["state_dict"])

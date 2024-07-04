@@ -85,13 +85,13 @@ class MULT(nn.Module):
 
         # (L,V) --> A
         audio_with_text = self.transfer_audio_with_text(audio_alignment_seq, text_alignment_seq, text_alignment_seq)
-        audio_with_video = self.transfer_audio_with_video(audio_alignment_seq, text_alignment_seq, text_alignment_seq)
+        audio_with_video = self.transfer_audio_with_video(audio_alignment_seq, video_alignment_seq, video_alignment_seq)
         audio_with_text_video = torch.cat([audio_with_text, audio_with_video], dim=2)
         audio_with_text_video = self.transfer_audio_mem(audio_with_text_video)
 
         # (L,A) --> V
         video_with_text = self.transfer_video_with_text(video_alignment_seq, text_alignment_seq, text_alignment_seq)
-        video_with_audio = self.transfer_video_with_audio(video_alignment_seq, text_alignment_seq, text_alignment_seq)
+        video_with_audio = self.transfer_video_with_audio(video_alignment_seq, audio_alignment_seq, audio_alignment_seq)
         video_with_text_audio = torch.cat([video_with_text, video_with_audio], dim=2)
         video_with_text_audio = self.transfer_video_mem(video_with_text_audio)
 

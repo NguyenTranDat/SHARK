@@ -14,7 +14,7 @@ DATA_VERSION = os.getenv("DATA_VERSION")
 DATA_DIR = os.getenv("DATA_DIR")
 
 BATCH_SIZE = int(os.getenv("BATCH_SIZE"))
-LEARNING_RATE = float(os.getenv("LEARNING_RATE"))
+LEARNING_RATE = [float(lr) for lr in os.getenv("LEARNING_RATE").split(", ")]
 NUM_EPOCH = int(os.getenv("NUM_EPOCH"))
 NUM_EPOCH_ARGUMENT = int(os.getenv("NUM_EPOCH_ARGUMENT"))
 
